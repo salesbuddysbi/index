@@ -15,14 +15,14 @@
            1. CORE VARIABLES & RESET
            ========================================= */
         :root {
-            --primary: #280071;
+            --primary: #280071;       /* Deep SBI Blue */
             --primary-dark: #1a004b;
-            --accent: #D60058;
-            --cyan: #00A3E0;
-            --green: #059669;
-            --orange: #f97316;
-            --indigo: #6366f1;
-            --whatsapp: #25D366;
+            --accent: #D60058;        /* SBI Pink */
+            --cyan: #00A3E0;          /* SBI Cyan */
+            --green: #059669;         /* Success Green */
+            --orange: #f97316;        /* Support Orange */
+            --indigo: #6366f1;        /* Dashboard Indigo */
+            --whatsapp: #25D366;      /* WhatsApp Green */
             
             --bg-body: #f8fafc;
             --surface: #ffffff;
@@ -60,15 +60,22 @@
             flex-direction: column;
         }
 
+        /* Page Transitions */
         .page { display: none; padding: 20px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); padding-bottom: 80px; }
         .page.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* =========================================
-           2. HEADER
+           2. SOPHISTICATED HEADER
            ========================================= */
         .hero-header {
-            background: linear-gradient(145deg, var(--primary) 0%, var(--primary-dark) 100%);
+            /* Removed the blue overlay gradient, just the image now */
+            background-image: url('image.png');
+            background-size: cover;
+            /* Changed position to top so the man's face isn't cropped */
+            background-position: top center; 
+            background-repeat: no-repeat;
+            
             color: white;
             padding: 50px 24px 40px 24px;
             border-bottom-left-radius: 40px;
@@ -78,22 +85,32 @@
             margin-bottom: 20px;
             position: relative;
         }
+        
         .hero-header::after {
             content: ''; position: absolute; top: -50px; right: -50px;
             width: 200px; height: 200px;
             background: rgba(255,255,255,0.05); border-radius: 50%;
         }
+        
         .brand-pill {
-            display: inline-block; background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
+            display: inline-block; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
             padding: 6px 14px; border-radius: 30px; font-size: 11px; font-weight: 700;
             text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;
             border: 1px solid rgba(255,255,255,0.2);
+            color: #ffffff;
         }
+        
         .app-name {
             font-size: 32px; font-weight: 800; margin: 0 0 8px 0; letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, #e0e7ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            color: #ffffff; 
+            /* Added stronger text shadows to keep text readable without the blue overlay */
+            text-shadow: 0 2px 10px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.8);
         }
-        .tagline { font-size: 15px; opacity: 0.85; font-weight: 400; letter-spacing: 0.5px; }
+        
+        .tagline { 
+            font-size: 15px; font-weight: 600; letter-spacing: 0.5px; 
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+        }
 
         /* =========================================
            3. DASHBOARD CARDS
@@ -115,11 +132,13 @@
         .action-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
 
         .card-content { display: flex; align-items: center; gap: 16px; }
+        
         .card-icon-box {
             width: 50px; height: 50px; border-radius: 16px;
             display: flex; align-items: center; justify-content: center; font-size: 24px;
         }
         
+        /* Icon Colors */
         .icon-blue { background: #eff6ff; color: var(--primary); }
         .icon-pink { background: #fdf2f8; color: var(--accent); }
         .icon-cyan { background: #ecfeff; color: var(--cyan); }
@@ -134,21 +153,36 @@
         .action-card:hover .arrow-icon { color: var(--primary); transform: translateX(5px); }
         
         /* =========================================
-           4. BUTTONS & UI
+           4. INTERACTIVE BUTTONS
            ========================================= */
         .action-buttons { display: flex; gap: 10px; }
+
         .interact-btn {
-            width: 42px; height: 42px; border-radius: 50%; border: none;
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            border: none;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-decoration: none;
         }
-        .interact-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 12px rgba(0,0,0,0.15); }
+
+        .interact-btn:hover {
+            transform: translateY(-4px) scale(1.1);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.15);
+        }
+
         .interact-btn:active { transform: scale(0.95); }
 
         .btn-dl { background: linear-gradient(135deg, var(--primary), #4a2c91); color: white; }
         .btn-wa { background: linear-gradient(135deg, #25D366, #128C7E); color: white; }
         .btn-call { background: linear-gradient(135deg, var(--orange), #ea580c); color: white; }
+        .btn-svg { width: 20px; height: 20px; fill: currentColor; }
 
+        /* =========================================
+           5. OTHER UI ELEMENTS
+           ========================================= */
         .nav-header { display: flex; align-items: center; padding: 20px 0; margin-bottom: 20px; }
         .back-btn {
             background: white; border: 1px solid var(--border-light); width: 40px; height: 40px;
@@ -161,32 +195,42 @@
         .search-box { background: white; padding: 20px; border-radius: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); margin-bottom: 24px; }
         .form-group { margin-bottom: 15px; }
         .form-label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-        .form-select, .form-input { width: 100%; padding: 14px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px; outline: none; transition: 0.2s; background: var(--bg-body); color: var(--text-main); }
+        .form-select, .form-input { width: 100%; padding: 14px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px; outline: none; transition: 0.2s; background: var(--bg-body); color: var(--text-main); font-family: inherit; }
         .form-select:focus, .form-input:focus { border-color: var(--primary); background: white; }
         .btn-search { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px rgba(40,0,113,0.2); transition: 0.2s; }
-        .btn-search:hover { background: var(--primary-dark); }
+        .btn-search:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+        .data-status { font-size: 11px; padding: 8px; margin-bottom: 15px; border-radius: 8px; text-align: center; }
+        .status-loading { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .status-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; display: none; }
+        .file-upload-wrapper { display: none; margin-bottom: 15px; text-align: center; }
+        .custom-file-upload { border: 1px dashed var(--border-light); display: inline-block; padding: 6px 12px; cursor: pointer; font-size: 12px; border-radius: 6px; background: white; }
 
         .hospital-list { display: flex; flex-direction: column; gap: 12px; }
-        .hospital-card { background: white; padding: 16px; border-radius: 16px; border: 1px solid var(--border-light); display: flex; gap: 15px; }
+        .hospital-card { background: white; padding: 16px; border-radius: 16px; border: 1px solid var(--border-light); transition: 0.2s; display: flex; gap: 15px; }
+        .hospital-card:hover { border-color: var(--cyan); transform: translateX(2px); }
         .hosp-icon { width: 40px; height: 40px; background: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #0284c7; font-size: 18px; flex-shrink: 0; }
         .hosp-details h4 { margin: 0 0 4px 0; font-size: 14px; font-weight: 700; color: var(--text-main); }
         .hosp-details p { margin: 0 0 8px 0; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; background: #dcfce7; color: #166534; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; background: #dcfce7; color: #166534; letter-spacing: 0.5px; }
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .empty-icon { font-size: 40px; margin-bottom: 10px; opacity: 0.5; }
 
+        /* Search Header (Results) */
         .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; display: none; }
         .result-count { font-size: 14px; font-weight: 700; color: var(--primary); }
-        .pdf-dl-btn { background: #ef4444; color: white; border: none; padding: 6px 16px; border-radius: 6px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; }
+        .pdf-dl-btn { background: #ef4444; color: white; border: none; padding: 6px 16px; border-radius: 6px; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; transition: 0.2s; }
         .pdf-dl-btn:disabled { background: #fca5a5; cursor: not-allowed; }
 
         /* Tabs */
         .tab-wrapper { background: white; padding: 6px; border-radius: 16px; display: flex; box-shadow: var(--shadow-sm); margin-bottom: 24px; }
         .tab-btn { flex: 1; padding: 12px; border: none; background: transparent; border-radius: 12px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: 0.3s; }
-        .tab-btn.active-tab { background: var(--primary); color: white; }
+        .tab-btn.active-tab { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(40, 0, 113, 0.2); }
         .tab-content { display: none; animation: fadeIn 0.3s; }
         .tab-content.active-content { display: block; }
         
-        .file-item { background: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; display: flex; align-items: center; border: 1px solid var(--border-light); }
+        .file-item { background: white; padding: 16px; border-radius: 16px; margin-bottom: 12px; display: flex; align-items: center; border: 1px solid transparent; transition: 0.2s; }
+        .file-item:hover { border-color: var(--border-light); transform: scale(1.01); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .file-icon { width: 40px; height: 40px; background: #f1f5f9; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-right: 15px; }
         .file-info { flex: 1; }
         .file-name { font-size: 14px; font-weight: 600; color: var(--text-main); display: block; margin-bottom: 2px; }
@@ -206,11 +250,6 @@
 
         .footer { text-align: center; font-size: 11px; color: var(--text-muted); padding: 20px; margin-top: auto; opacity: 0.6; }
 
-        /* Hidden Utility */
-        .data-status { font-size: 11px; padding: 8px; margin-bottom: 15px; border-radius: 8px; text-align: center; }
-        .status-loading { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
-        .status-error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; display: none; }
-        .file-upload-wrapper { display: none; margin-bottom: 15px; text-align: center; }
     </style>
 </head>
 <body>
@@ -239,7 +278,7 @@
                 <div class="action-card" onclick="openExternal('emi_calculator.html', 'EMI Calculator')">
                     <div class="card-content">
                         <div class="card-icon-box icon-indigo">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16.01" y2="14"/><line x1="8" y1="14" x2="8.01" y2="14"/><line x1="12" y1="14" x2="12.01" y2="14"/><line x1="16" y1="18" x2="16.01" y2="18"/><line x1="8" y1="18" x2="8.01" y2="18"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16.01" y2="14"/><line x1="8" y1="14" x2="8.01" y2="14"/><line x1="12" y1="14" x2="12.01" y2="14"/><line x1="16" y1="18" x2="16.01" y2="18"/><line x1="8" y1="18" x2="8.01" y2="18"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
                         </div>
                         <div class="card-text"><h3>EMI Calculator</h3><p>Calculate Installments</p></div>
                     </div>
@@ -272,7 +311,7 @@
 
             </div>
         </div>
-        <div class="footer">Version 9.4 (Layout Optimized) | Internal Use Only</div>
+        <div class="footer">Version 9.3 (Native PDF Fix) | Internal Use Only</div>
     </div>
 
     <div id="selection" class="page">
@@ -334,7 +373,14 @@
         
         <div id="statusLoading" class="data-status status-loading">⌛ Connecting to database...</div>
         <div id="statusError" class="data-status status-error">❌ Connection Failed.</div>
-        
+        <div id="manualUpload" class="file-upload-wrapper">
+            <p style="font-size:11px; margin-bottom:5px; color:#666;">Could not auto-fetch. Please select <b>network_hospitals.xlsx</b> manually:</p>
+            <label class="custom-file-upload">
+                <input type="file" id="fileInput" accept=".xlsx, .xls" style="display:none;" onchange="handleFileSelect(event)">
+                📂 Select Excel File
+            </label>
+        </div>
+
         <div class="search-box">
             <div class="form-group">
                 <label class="form-label">Search Criteria</label>
@@ -363,11 +409,7 @@
     </div>
 
     <div id="downloads" class="page">
-        <div class="nav-header">
-            <button class="back-btn" onclick="navigate('home')">&#8592;</button>
-            <div class="page-title">Downloads</div>
-        </div>
-        
+        <div class="nav-header"><button class="back-btn" onclick="navigate('home')">&#8592;</button><div class="page-title">Downloads</div></div>
         <div class="tab-wrapper">
             <button class="tab-btn active-tab" onclick="switchTab('brochures')">Brochures</button>
             <button class="tab-btn" onclick="switchTab('lists')">Lists</button>
@@ -376,296 +418,57 @@
         
         <div id="tab-brochures" class="tab-content active-content">
             <div class="file-item">
-                <div class="file-icon">📘</div>
-                <div class="file-info">
-                    <span class="file-name">Health Alpha</span>
-                    <span class="file-meta">PDF • Product Brochure</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="SBI General HealthAlpha_Leaflet - Alpha Select & Alpha Ultimate.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('SBI General HealthAlpha_Leaflet - Alpha Select & Alpha Ultimate.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
-            
+                <div class="file-icon">📘</div><div class="file-info"><span class="file-name">Alpha</span><span class="file-meta">PDF • Product Brochure</span></div>
+                <div class="action-buttons"><a href="SBI General HealthAlpha_Leaflet - Alpha Select & Alpha Ultimate.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('SBI General HealthAlpha_Leaflet - Alpha Select & Alpha Ultimate.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
             <div class="file-item">
-                <div class="file-icon">📘</div>
-                <div class="file-info">
-                    <span class="file-name">Super Health</span>
-                    <span class="file-meta">PDF • Product Brochure</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Super Health AIO.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Super Health AIO.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
-
+                <div class="file-icon">📘</div><div class="file-info"><span class="file-name">Super Health</span><span class="file-meta">PDF • Product Brochure</span></div>
+                <div class="action-buttons"><a href="Super Health AIO.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Super Health AIO.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
             <div class="file-item">
-                <div class="file-icon">📘</div>
-                <div class="file-info">
-                    <span class="file-name">Arogya Supreme</span>
-                    <span class="file-meta">PDF • Product Brochure</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Arogya Supreme AIO.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Arogya Supreme AIO.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
-
+                <div class="file-icon">📘</div><div class="file-info"><span class="file-name">Arogya Supreme</span><span class="file-meta">PDF • Product Brochure</span></div>
+                <div class="action-buttons"><a href="Arogya Supreme AIO.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Arogya Supreme AIO.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
             <div class="file-item">
-                <div class="file-icon">📘</div>
-                <div class="file-info">
-                    <span class="file-name">Super Top-up</span>
-                    <span class="file-meta">PDF • Product Brochure</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Super Top-Up.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Super Top-Up.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
+                <div class="file-icon">📘</div><div class="file-info"><span class="file-name">Super Top-up</span><span class="file-meta">PDF • Product Brochure</span></div>
+                <div class="action-buttons"><a href="Super Top-Up.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Super Top-Up.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
         </div>
 
         <div id="tab-lists" class="tab-content">
+            
             <div class="file-item">
-                <div class="file-icon">📑</div>
-                <div class="file-info">
-                    <span class="file-name">Annexure II</span>
-                    <span class="file-meta">Non-Payable Items</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Annex II.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Annex II.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
+                <div class="file-icon">📑</div><div class="file-info"><span class="file-name">Annexure II</span><span class="file-meta">Non-Payable Items</span></div>
+                <div class="action-buttons"><a href="Annex II.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Annex II.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
 
             <div class="file-item">
-                <div class="file-icon">📋</div>
-                <div class="file-info">
-                    <span class="file-name">Specific List</span>
-                    <span class="file-meta">All Policies</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Specific_List.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Specific_List.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
+                <div class="file-icon">📋</div><div class="file-info"><span class="file-name">Specific List</span><span class="file-meta">All Policies</span></div>
+                <div class="action-buttons"><a href="Specific_List.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Specific_List.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
 
             <div class="file-item">
-                <div class="file-icon">✖️</div>
-                <div class="file-info">
-                    <span class="file-name">Health Multiplier</span>
-                    <span class="file-meta">Super Health</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="SuperHealth_Multiplier.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('SuperHealth_Multiplier.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
+                <div class="file-icon">✖️</div><div class="file-info"><span class="file-name">Health Multiplier</span><span class="file-meta">Super Health</span></div>
+                <div class="action-buttons"><a href="SuperHealth_Multiplier.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('SuperHealth_Multiplier.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
+            
+            <div class="file-item">
+                <div class="file-icon">✈️</div><div class="file-info"><span class="file-name">Medical Treatment Abroad</span><span class="file-meta">Super Health</span></div>
+                <div class="action-buttons"><a href="SuperHealth_Abroad.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('SuperHealth_Abroad.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
 
             <div class="file-item">
-                <div class="file-icon">✈️</div>
-                <div class="file-info">
-                    <span class="file-name">Medical Treatment Abroad</span>
-                    <span class="file-meta">Super Health</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="SuperHealth_Abroad.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('SuperHealth_Abroad.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
+                <div class="file-icon">🪂</div><div class="file-info"><span class="file-name">Adventure Sports</span><span class="file-meta">Health Alpha</span></div>
+                <div class="action-buttons"><a href="Alpha_Adventure.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Alpha_Adventure.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
 
             <div class="file-item">
-                <div class="file-icon">🪂</div>
-                <div class="file-info">
-                    <span class="file-name">Adventure Sports</span>
-                    <span class="file-meta">Health Alpha</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Alpha_Adventure.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Alpha_Adventure.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
+                <div class="file-icon">🏋️</div><div class="file-info"><span class="file-name">Gym & Sports Injury</span><span class="file-meta">Health Alpha</span></div>
+                <div class="action-buttons"><a href="Alpha_Gym.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Alpha_Gym.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
 
             <div class="file-item">
-                <div class="file-icon">🏋️</div>
-                <div class="file-info">
-                    <span class="file-name">Gym & Sports Injury</span>
-                    <span class="file-meta">Health Alpha</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Alpha_Gym.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Alpha_Gym.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="file-item">
-                <div class="file-icon">🌍</div>
-                <div class="file-info">
-                    <span class="file-name">Global Cover</span>
-                    <span class="file-meta">Health Alpha</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="Alpha_Global.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('Alpha_Global.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
+                <div class="file-icon">🌍</div><div class="file-info"><span class="file-name">Global Cover</span><span class="file-meta">Health Alpha</span></div>
+                <div class="action-buttons"><a href="Alpha_Global.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('Alpha_Global.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
         </div>
 
         <div id="tab-forms" class="tab-content">
             <div class="file-item">
-                <div class="file-icon">📋</div>
-                <div class="file-info">
-                    <span class="file-name">AML Form</span>
-                    <span class="file-meta">KYC Declaration</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="AML Form.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('AML Form.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
-
+                <div class="file-icon">📋</div><div class="file-info"><span class="file-name">AML Form</span><span class="file-meta">KYC Declaration</span></div>
+                <div class="action-buttons"><a href="AML Form.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('AML Form.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button></div></div>
             <div class="file-item">
-                <div class="file-icon">🏥</div>
-                <div class="file-info">
-                    <span class="file-name">Claim Form</span>
-                    <span class="file-meta">Reimbursement</span>
-                </div>
-                <div class="action-buttons">
-                    <a href="claim_form.pdf" download class="interact-btn btn-dl" title="Download">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    </a>
-                    <button class="interact-btn btn-wa" onclick="shareSmart('claim_form.pdf')" title="Share">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="support" class="page">
-        <div class="nav-header">
-            <button class="back-btn" onclick="navigate('home')">&#8592;</button>
-            <div class="page-title">Support</div>
-        </div>
-
-        <div class="section-label" style="margin-top:0;">For Intermediaries</div>
-        <div class="support-card">
-            <div class="support-header">
-                <div class="support-icon">🤝</div>
-                <div class="support-title">Agents & Partners</div>
-            </div>
-            <div class="support-row">
-                <div>
-                    <div class="contact-label">Helpdesk (24/7)</div>
-                    <a href="tel:1800221111" class="contact-value">1800 22 1111</a>
-                </div>
-                <a href="tel:1800221111" class="interact-btn btn-call" title="Call Now">📞</a>
-            </div>
-        </div>
-
-        <div class="section-label">For Customers (Claims)</div>
-        <div class="support-card">
-            <div class="support-header">
-                <div class="support-icon">🏥</div>
-                <div class="support-title">Health Claims</div>
-            </div>
-            <div class="support-row">
-                <div>
-                    <div class="contact-label">Toll Free (24/7)</div>
-                    <div class="contact-value"><a href="tel:18002103366" class="contact-link">1800 210 3366</a></div>
-                    <div class="contact-value"><a href="tel:18002106366" class="contact-link">1800 210 6366</a></div>
-                </div>
-                <a href="tel:18002103366" class="interact-btn btn-call" title="Call Now">📞</a>
-            </div>
-            <div class="support-row">
-                <div>
-                    <div class="contact-label">Email ID</div>
-                    <a href="mailto:sbig.health@sbigeneral.in" class="email-link">sbig.health@sbigeneral.in</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-label">For Any Query</div>
-        <div class="support-card">
-            <div class="support-header">
-                <div class="support-icon">📞</div>
-                <div class="support-title">Customer Care</div>
-            </div>
-            <div class="support-row">
-                <div>
-                    <div class="contact-label">Toll Free</div>
-                    <a href="tel:18001021111" class="contact-value">1800 102 1111</a>
-                </div>
-            </div>
-            <div class="support-row">
-                <div>
-                    <div class="contact-label">Email ID</div>
-                    <a href="mailto:customer.care@sbigeneral.in" class="email-link">customer.care@sbigeneral.in</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-label">Downloads</div>
-        <div class="file-item" style="border: 1px solid var(--accent);">
-            <div class="file-icon" style="background:#fdf2f8; color:var(--accent);">📄</div>
-            <div class="file-info">
-                <span class="file-name" style="color:var(--accent);">Claim Form</span>
-                <span class="file-meta">Reimbursement</span>
-            </div>
-            <div class="action-buttons">
-                <a href="claim_form.pdf" download class="interact-btn btn-dl" style="background:var(--accent);" title="Download">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                </a>
-                <button class="interact-btn btn-wa" onclick="shareSmart('claim_form.pdf')" style="background:var(--whatsapp);" title="Share">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-                </button>
+                <div class="file-icon">🏥</div><div class="file-info"><span class="file-name">Claim Form</span><span class="file-meta">Reimbursement</span></div>
+                <div class="action-buttons"><a href="claim_form.pdf" download class="interact-btn btn-dl" title="Download"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a><button class="interact-btn btn-wa" onclick="shareSmart('claim_form.pdf')" title="Share"><svg class="btn-svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
             </div>
         </div>
     </div>
