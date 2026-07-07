@@ -13,34 +13,88 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- STATIC, BULLETPROOF CSS CDN (Cannot be blocked by firewalls) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 
     <!-- CSV Parser & PDF Generators -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        sbiPurple: '#801C7D',
-                        sbiBlue: '#00A9E0',
-                        sbiDark: '#212529',
-                        sbiLight: '#F7F7F7',
-                        footerDark: '#1c2127'
-                    },
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-
+    <!-- CUSTOM STATIC STYLES -->
     <style>
+        :root {
+            --sbiPurple: #801C7D;
+            --sbiBlue: #00A9E0;
+            --sbiDark: #212529;
+            --sbiLight: #F7F7F7;
+            --footerDark: #1c2127;
+            --simba: #f27421;
+        }
+
+        /* Branding Colors */
+        .text-sbiPurple { color: var(--sbiPurple); }
+        .text-sbiBlue { color: var(--sbiBlue); }
+        .text-sbiDark { color: var(--sbiDark); }
+        .text-sbiLight { color: var(--sbiLight); }
+        
+        .bg-sbiPurple { background-color: var(--sbiPurple); }
+        .bg-sbiBlue { background-color: var(--sbiBlue); }
+        .bg-sbiDark { background-color: var(--sbiDark); }
+        .bg-sbiLight { background-color: var(--sbiLight); }
+        .bg-footerDark { background-color: var(--footerDark); }
+        .bg-simba { background-color: var(--simba); }
+
+        .border-sbiPurple { border-color: var(--sbiPurple); }
+        .border-sbiBlue { border-color: var(--sbiBlue); }
+        .border-l-sbiPurple { border-left-color: var(--sbiPurple); }
+        .border-l-sbiBlue { border-left-color: var(--sbiBlue); }
+
+        /* Extended Color Overrides */
+        .text-orange-500 { color: #f97316; }
+        .bg-orange-50 { background-color: #fff7ed; }
+        .bg-orange-100 { background-color: #ffedd5; }
+        .bg-orange-200 { background-color: #fed7aa; }
+        .border-orange-100 { border-color: #ffedd5; }
+        .border-orange-200 { border-color: #fed7aa; }
+        .border-l-orange-500 { border-left-color: #f97316; }
+        .active\:bg-orange-600:active { background-color: #ea580c; }
+
+        .text-teal-500 { color: #14b8a6; }
+        .bg-teal-50 { background-color: #f0fdfa; }
+        .border-l-teal-500 { border-left-color: #14b8a6; }
+
+        /* Custom Sizing & Spacing */
+        ::selection { background-color: var(--sbiBlue); color: white; }
+        .min-h-100dvh { min-height: 100vh; min-height: 100dvh; }
+        
+        .text-8px { font-size: 8px; }
+        .text-9px { font-size: 9px; line-height: 1; }
+        .text-10px { font-size: 10px; }
+        .text-15px { font-size: 15px; }
+        .text-26px { font-size: 26px; }
+        .tracking-02em { letter-spacing: 0.2em; }
+        
+        .gap-3-5 { gap: 0.875rem; }
+        .p-1-5 { padding: 0.375rem; }
+        .p-3-5 { padding: 0.875rem; }
+        
+        .max-h-180px { max-height: 180px; }
+        @media (min-width: 768px) {
+            .md-max-h-240px { max-height: 240px; }
+        }
+
+        /* Interactions */
+        .active-scale-98:active { transform: scale(0.98); }
+
         ::-webkit-scrollbar { display: none; }
-        body { -ms-overflow-style: none; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
+        body { 
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
+            -webkit-tap-highlight-color: transparent; 
+            font-family: 'Poppins', sans-serif;
+        }
+        
         .glass-card { 
             background: #ffffff; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.04);
@@ -48,20 +102,18 @@
         }
     </style>
 </head>
-<body class="bg-sbiLight text-sbiDark font-sans antialiased overflow-x-hidden selection:bg-sbiBlue selection:text-white flex flex-col min-h-[100dvh]">
+<body class="bg-sbiLight text-sbiDark font-sans antialiased overflow-x-hidden selection:bg-sbiBlue selection:text-white flex flex-col min-h-100dvh">
 
     <!-- APP HEADER -->
     <nav class="fixed top-0 left-0 w-full z-50 bg-white shadow-sm border-b border-gray-100 h-16 flex items-center">
-        <!-- Desktop max-width limit for nav -->
         <div class="px-4 w-full max-w-3xl mx-auto flex justify-between items-center">
             
-            <!-- TYPOGRAPHY LOGO -->
             <div class="flex flex-col justify-center cursor-pointer" onclick="navigateTo('homeView')">
                 <span class="font-extrabold text-sbiPurple text-xl leading-none tracking-tight">Sales Buddy</span>
-                <span class="font-bold text-gray-400 text-[9px] uppercase tracking-[0.2em] mt-0.5">One Touch Point</span>
+                <span class="font-bold text-gray-400 text-9px uppercase tracking-02em mt-0.5">One Touch Point</span>
             </div>
             
-            <a href="https://dip.sbigeneral.in/Login/LoginSBI" target="_blank" class="bg-[#f27421] active:bg-orange-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow flex items-center gap-2 transition-colors tracking-wide">
+            <a href="https://dip.sbigeneral.in/Login/LoginSBI" target="_blank" class="bg-simba active:bg-orange-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow flex items-center gap-2 transition-colors tracking-wide">
                 <i class="fas fa-sign-in-alt"></i> SIMBA
             </a>
         </div>
@@ -75,41 +127,40 @@
 
             <div class="px-5 flex-grow mt-6">
                 
-                <!-- GREETING & PROFESSIONAL CONTEXT -->
                 <div class="mb-6">
-                    <h1 class="text-[26px] font-extrabold text-sbiDark tracking-tight">Welcome back!</h1>
+                    <h1 class="text-26px font-extrabold text-sbiDark tracking-tight">Welcome back!</h1>
                     <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">Wishing you a wonderful day! Please choose an option below to continue.</p>
                 </div>
 
                 <div class="flex flex-col gap-3">
-                    <div class="glass-card p-3.5 rounded-2xl active:scale-[0.98] transition-transform cursor-pointer border-l-4 border-l-sbiBlue flex items-center gap-3.5" onclick="navigateTo('quotePageView')">
+                    <div class="glass-card p-3-5 rounded-2xl active-scale-98 transition-transform cursor-pointer border-l-4 border-l-sbiBlue flex items-center gap-3-5" onclick="navigateTo('quotePageView')">
                         <div class="w-11 h-11 bg-blue-50 text-sbiBlue rounded-full flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-file-invoice-dollar"></i></div>
                         <div>
-                            <h3 class="text-[15px] font-bold text-gray-900 leading-tight">Quick Quote</h3>
+                            <h3 class="text-15px font-bold text-gray-900 leading-tight">Quick Quote</h3>
                         </div>
                         <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                     </div>
                     
-                    <div class="glass-card p-3.5 rounded-2xl active:scale-[0.98] transition-transform cursor-pointer border-l-4 border-l-sbiPurple flex items-center gap-3.5" onclick="openCalculator('emi_calculator.html', 'homeView')">
+                    <div class="glass-card p-3-5 rounded-2xl active-scale-98 transition-transform cursor-pointer border-l-4 border-l-sbiPurple flex items-center gap-3-5" onclick="openCalculator('emi_calculator.html', 'homeView')">
                         <div class="w-11 h-11 bg-purple-50 text-sbiPurple rounded-full flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-calculator"></i></div>
                         <div>
-                            <h3 class="text-[15px] font-bold text-gray-900 leading-tight">EMI Calculator</h3>
+                            <h3 class="text-15px font-bold text-gray-900 leading-tight">EMI Calculator</h3>
                         </div>
                         <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                     </div>
 
-                    <div class="glass-card p-3.5 rounded-2xl active:scale-[0.98] transition-transform cursor-pointer border-l-4 border-l-green-500 flex items-center gap-3.5" onclick="initCashlessView()">
+                    <div class="glass-card p-3-5 rounded-2xl active-scale-98 transition-transform cursor-pointer border-l-4 border-l-green-500 flex items-center gap-3-5" onclick="initCashlessView()">
                         <div class="w-11 h-11 bg-green-50 text-green-500 rounded-full flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-hospital-user"></i></div>
                         <div>
-                            <h3 class="text-[15px] font-bold text-gray-900 leading-tight">Cashless Hospital</h3>
+                            <h3 class="text-15px font-bold text-gray-900 leading-tight">Cashless Hospital</h3>
                         </div>
                         <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                     </div>
                     
-                    <div class="glass-card p-3.5 rounded-2xl active:scale-[0.98] transition-transform cursor-pointer border-l-4 border-l-orange-500 flex items-center gap-3.5" onclick="navigateTo('downloadsPageView')">
+                    <div class="glass-card p-3-5 rounded-2xl active-scale-98 transition-transform cursor-pointer border-l-4 border-l-orange-500 flex items-center gap-3-5" onclick="navigateTo('downloadsPageView')">
                         <div class="w-11 h-11 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-download"></i></div>
                         <div>
-                            <h3 class="text-[15px] font-bold text-gray-900 leading-tight">Downloads</h3>
+                            <h3 class="text-15px font-bold text-gray-900 leading-tight">Downloads</h3>
                         </div>
                         <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                     </div>
@@ -123,14 +174,14 @@
                         <a href="https://apps.apple.com/in/app/sbi-general-insurance/id1495616048" target="_blank" class="bg-white text-black py-2 px-2 rounded-lg flex items-center justify-center gap-2 active:bg-gray-200 transition-colors">
                             <i class="fab fa-apple text-2xl"></i>
                             <div class="text-left flex flex-col justify-center">
-                                <span class="text-[8px] uppercase font-bold leading-none text-gray-600">Download on</span>
+                                <span class="text-8px uppercase font-bold leading-none text-gray-600">Download on</span>
                                 <span class="text-xs font-bold leading-tight mt-0.5">App Store</span>
                             </div>
                         </a>
                         <a href="https://play.google.com/store/apps/details?id=com.sbig.insurance&hl=en_IN" target="_blank" class="bg-white text-black py-2 px-2 rounded-lg flex items-center justify-center gap-2 active:bg-gray-200 transition-colors">
                             <i class="fab fa-google-play text-xl text-green-500"></i>
                             <div class="text-left flex flex-col justify-center">
-                                <span class="text-[8px] uppercase font-bold leading-none text-gray-600">Get it on</span>
+                                <span class="text-8px uppercase font-bold leading-none text-gray-600">Get it on</span>
                                 <span class="text-xs font-bold leading-tight mt-0.5">Google Play</span>
                             </div>
                         </a>
@@ -152,21 +203,21 @@
             </div>
             
             <div class="flex flex-col gap-3">
-                <div onclick="openCalculator('super_health.html', 'quotePageView')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 active:bg-blue-50 transition-colors border-l-4 border-l-sbiBlue flex items-center gap-3.5 cursor-pointer">
+                <div onclick="openCalculator('super_health.html', 'quotePageView')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 active:bg-blue-50 transition-colors border-l-4 border-l-sbiBlue flex items-center gap-3-5 cursor-pointer">
                     <div class="w-11 h-11 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-shield-alt text-lg text-sbiBlue"></i></div>
-                    <h3 class="text-[15px] font-bold text-sbiDark">Super Health</h3>
+                    <h3 class="text-15px font-bold text-sbiDark">Super Health</h3>
                     <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                 </div>
                 
-                <div onclick="openCalculator('health_alpha.html', 'quotePageView')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 active:bg-purple-50 transition-colors border-l-4 border-l-sbiPurple flex items-center gap-3.5 cursor-pointer">
+                <div onclick="openCalculator('health_alpha.html', 'quotePageView')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 active:bg-purple-50 transition-colors border-l-4 border-l-sbiPurple flex items-center gap-3-5 cursor-pointer">
                     <div class="w-11 h-11 bg-purple-50 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-heartbeat text-lg text-sbiPurple"></i></div>
-                    <h3 class="text-[15px] font-bold text-sbiDark">Health Alpha - Select</h3>
+                    <h3 class="text-15px font-bold text-sbiDark">Health Alpha - Select</h3>
                     <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                 </div>
 
-                <div onclick="openCalculator('super_top_up.html', 'quotePageView')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 active:bg-teal-50 transition-colors border-l-4 border-l-teal-500 flex items-center gap-3.5 cursor-pointer">
+                <div onclick="openCalculator('super_top_up.html', 'quotePageView')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 active:bg-teal-50 transition-colors border-l-4 border-l-teal-500 flex items-center gap-3-5 cursor-pointer">
                     <div class="w-11 h-11 bg-teal-50 rounded-full flex items-center justify-center flex-shrink-0"><i class="fas fa-layer-group text-lg text-teal-500"></i></div>
-                    <h3 class="text-[15px] font-bold text-sbiDark">Super Top-Up</h3>
+                    <h3 class="text-15px font-bold text-sbiDark">Super Top-Up</h3>
                     <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                 </div>
             </div>
@@ -229,12 +280,12 @@
                     </button>
                 </div>
 
-                <!-- Action Bar (Hidden until search yields results) -->
+                <!-- Action Bar -->
                 <div id="actionButtons" class="flex gap-3 mb-4 shrink-0 hidden">
-                    <button onclick="downloadHospitalsPDF()" class="flex-1 bg-sbiBlue text-white py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 active:bg-blue-600 transition-colors shadow-sm">
+                    <button onclick="downloadHospitalsPDF()" class="flex-1 bg-sbiBlue text-white py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-sm">
                         <i class="fas fa-file-pdf"></i> Download PDF
                     </button>
-                    <button onclick="shareHospitalsWA()" class="flex-1 bg-green-500 text-white py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 active:bg-green-600 transition-colors shadow-sm">
+                    <button onclick="shareHospitalsWA()" class="flex-1 bg-green-500 text-white py-2.5 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-sm">
                         <i class="fab fa-whatsapp text-lg"></i> Share PDF
                     </button>
                 </div>
@@ -243,7 +294,7 @@
                 <div id="resultsWrapper" class="flex-grow relative overflow-hidden flex flex-col hidden">
                     <p class="text-xs text-gray-500 mb-2 font-medium flex justify-between items-center">
                         <span>Found: <span id="hospCount" class="font-bold text-sbiDark">0</span> matches</span>
-                        <span id="previewNote" class="text-[9px] uppercase text-sbiBlue font-bold bg-blue-50 px-2 py-0.5 rounded">Preview Mode</span>
+                        <span id="previewNote" class="text-9px uppercase text-sbiBlue font-bold bg-blue-50 px-2 py-0.5 rounded">Preview Mode</span>
                     </p>
                     <div id="hospitalsContainer" class="flex-grow overflow-y-auto pb-6 flex flex-col gap-3">
                         <!-- Cards injected via JS -->
@@ -256,7 +307,7 @@
         <!-- 4. IFRAME CALCULATOR VIEW -->
         <div id="calculatorView" class="app-view hidden flex-grow flex flex-col bg-white transition-opacity duration-300">
             <div class="w-full max-w-3xl mx-auto bg-white border-b border-gray-100 shadow-sm z-10 px-4 py-2 flex items-center">
-                <button onclick="navigateTo(currentCalcBackTarget)" class="text-gray-700 active:text-sbiBlue font-medium flex items-center gap-2 p-2 -ml-2 rounded-lg">
+                <button onclick="navigateTo(currentCalcBackTarget)" class="text-gray-700 font-medium flex items-center gap-2 p-2 -ml-2 rounded-lg">
                     <i class="fas fa-arrow-left"></i> <span id="calcBackBtnText" class="text-sm">Back</span>
                 </button>
             </div>
@@ -271,13 +322,12 @@
             <button onclick="navigateTo('homeView')" class="mb-5 bg-white text-gray-600 active:bg-gray-100 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 shadow-sm border border-gray-100 w-max"><i class="fas fa-arrow-left"></i> Back</button>
             <div class="mb-5"><h2 class="text-2xl font-bold text-sbiDark mb-1">Downloads</h2></div>
             <div class="flex flex-col gap-3 pb-8">
-                <!-- Moved Important Lists to the top -->
-                <button onclick="openDownloadCategory('Important Lists', 'list')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center gap-3.5 text-left border-l-4 border-l-teal-500"><i class="fas fa-list-check text-teal-500 text-lg"></i> <h3 class="font-bold text-[15px]">Important Lists</h3></button>
-                <button onclick="openDownloadCategory('Brochures', 'brochure')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center gap-3.5 text-left border-l-4 border-l-sbiBlue"><i class="fas fa-book-open text-sbiBlue text-lg"></i> <h3 class="font-bold text-[15px]">Brochures</h3></button>
-                <button onclick="openDownloadCategory('Proposal Forms', 'proposal')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center gap-3.5 text-left border-l-4 border-l-sbiPurple"><i class="fas fa-file-signature text-sbiPurple text-lg"></i> <h3 class="font-bold text-[15px]">Proposal Forms</h3></button>
-                <button onclick="openDownloadCategory('Policy Wordings', 'policy')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center gap-3.5 text-left border-l-4 border-l-green-500"><i class="fas fa-file-contract text-green-500 text-lg"></i> <h3 class="font-bold text-[15px]">Policy Wordings</h3></button>
-                <button onclick="openDownloadCategory('Claim Forms', 'claim')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center gap-3.5 text-left border-l-4 border-l-red-500"><i class="fas fa-file-medical text-red-500 text-lg"></i> <h3 class="font-bold text-[15px]">Claim Forms</h3></button>
-                <button onclick="openDownloadCategory('Other Forms', 'other')" class="bg-white rounded-2xl p-3.5 shadow-sm border border-gray-100 flex items-center gap-3.5 text-left border-l-4 border-l-orange-500"><i class="fas fa-folder-open text-orange-500 text-lg"></i> <h3 class="font-bold text-[15px]">Other Forms</h3></button>
+                <button onclick="openDownloadCategory('Important Lists', 'list')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 flex items-center gap-3-5 text-left border-l-4 border-l-teal-500"><i class="fas fa-list-check text-teal-500 text-lg"></i> <h3 class="font-bold text-15px">Important Lists</h3></button>
+                <button onclick="openDownloadCategory('Brochures', 'brochure')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 flex items-center gap-3-5 text-left border-l-4 border-l-sbiBlue"><i class="fas fa-book-open text-sbiBlue text-lg"></i> <h3 class="font-bold text-15px">Brochures</h3></button>
+                <button onclick="openDownloadCategory('Proposal Forms', 'proposal')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 flex items-center gap-3-5 text-left border-l-4 border-l-sbiPurple"><i class="fas fa-file-signature text-sbiPurple text-lg"></i> <h3 class="font-bold text-15px">Proposal Forms</h3></button>
+                <button onclick="openDownloadCategory('Policy Wordings', 'policy')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 flex items-center gap-3-5 text-left border-l-4 border-l-green-500"><i class="fas fa-file-contract text-green-500 text-lg"></i> <h3 class="font-bold text-15px">Policy Wordings</h3></button>
+                <button onclick="openDownloadCategory('Claim Forms', 'claim')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 flex items-center gap-3-5 text-left border-l-4 border-l-red-500"><i class="fas fa-file-medical text-red-500 text-lg"></i> <h3 class="font-bold text-15px">Claim Forms</h3></button>
+                <button onclick="openDownloadCategory('Other Forms', 'other')" class="bg-white rounded-2xl p-3-5 shadow-sm border border-gray-100 flex items-center gap-3-5 text-left border-l-4 border-l-orange-500"><i class="fas fa-folder-open text-orange-500 text-lg"></i> <h3 class="font-bold text-15px">Other Forms</h3></button>
             </div>
         </div>
 
@@ -293,7 +343,6 @@
         const shareOnWhatsApp = (text) => window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         let currentCalcBackTarget = 'homeView';
 
-        // --- NAVIGATION LOGIC ---
         function navigateTo(viewId) {
             document.querySelectorAll('.app-view').forEach(view => view.classList.add('hidden'));
             document.getElementById(viewId).classList.remove('hidden');
@@ -318,15 +367,10 @@
             'claim': [{name: "Health Alpha", slug: "health_alpha_claim"}, {name: "Super Health", slug: "super_health_claim"}, {name: "Super Top-Up", slug: "super_top_up_claim"}],
             'other': [{name: "AML Form", slug: "aml_form"}, {name: "Form 97", slug: "form_97"}],
             'list': [
-                // Group 1: Common Lists
                 {group: "Common Lists", name: "Specific Waiting Period", slug: "specific_waiting_period", icon: "⏳"}, 
                 {group: "Common Lists", name: "Annexure II (Non-Payable Items)", slug: "annexure_ii", icon: "📄"}, 
-                
-                // Group 2: Super Health Lists
                 {group: "Super Health Lists", name: "Health Multiplier", slug: "health_multiplier", icon: "✖️"}, 
                 {group: "Super Health Lists", name: "Medical Treatment Abroad", slug: "medical_abroad", icon: "✈️"},
-                
-                // Group 3: Health Alpha Lists
                 {group: "Health Alpha Lists", name: "Adventure Sports", slug: "adventure_sports", icon: "🪂"},
                 {group: "Health Alpha Lists", name: "Gym and Sports Injury", slug: "gym_sports_injury", icon: "🏋️"},
                 {group: "Health Alpha Lists", name: "Global Coverage", slug: "health_alpha_global_cover", icon: "🌍"}
@@ -342,7 +386,6 @@
             let currentGroup = "";
 
             (docDatabase[catSlug] || []).forEach(item => {
-                // RENDER SUB-HEADERS IF ITEM HAS A GROUP
                 if (item.group && item.group !== currentGroup) {
                     currentGroup = item.group;
                     container.innerHTML += `<h3 class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mt-4 mb-1 pl-1">${currentGroup}</h3>`;
@@ -353,13 +396,11 @@
                 const fileUrl = baseUrl.endsWith('/') ? baseUrl + serverFileName : baseUrl + '/' + serverFileName;
                 const iconDisplay = item.icon ? `<div class="text-xl">${item.icon}</div>` : `<i class="fas fa-file-pdf text-red-500 text-lg"></i>`;
 
-                // SMART CLEAN NAME GENERATOR
-                let singularCat = catName.replace(/s$/, ''); // Removes trailing 's' (Brochures -> Brochure)
+                let singularCat = catName.replace(/s$/, '');
                 let cleanFileName = ['Other Forms', 'Important Lists'].includes(catName) 
                     ? `${item.name}.pdf` 
                     : `${item.name} ${singularCat}.pdf`;
 
-                // Safely escape strings to pass into the onclick function
                 const safeName = item.name.replace(/'/g, "\\'");
                 const safeGroup = (item.group || '').replace(/'/g, "\\'");
                 const safeCleanName = cleanFileName.replace(/'/g, "\\'");
@@ -379,20 +420,15 @@
         }
 
         async function shareFileNative(itemName, categoryName, fileUrl, cleanFileName, groupName) {
-            
-            // SMART CONTEXTUAL WHATSAPP TEXT GENERATOR
             let shareText = "";
             let baseFileName = cleanFileName.replace('.pdf', '');
 
             if (groupName && groupName !== 'Common Lists') {
-                // If it's a specific product list (e.g. "Super Health Lists"), strip the word "Lists"
                 let prodName = groupName.replace(" Lists", "");
                 shareText = `*${prodName}*\n\nPlease find the official document for *${baseFileName}* attached.`;
             } else if (categoryName !== 'Important Lists' && !['Other Forms'].includes(categoryName)) {
-                // If it's a Brochure/Proposal Form, the item name IS the product (e.g. "Health Alpha")
                 shareText = `*${itemName}*\n\nPlease find the official document for *${baseFileName}* attached.`;
             } else {
-                // If it's a generic form or Common List
                 shareText = `Please find the official document for *${baseFileName}* attached.`;
             }
 
@@ -418,7 +454,6 @@
             }
         }
         
-        // --- CUSTOMER APP LINK SHARE ---
         function shareCustomerAppWA() {
             const waText = `Download the official SBI General Customer App to manage your policies easily.\n\niOS: https://apps.apple.com/in/app/sbi-general-insurance/id1495616048\n\nAndroid: https://play.google.com/store/apps/details?id=com.sbig.insurance&hl=en_IN`;
             shareOnWhatsApp(waText);
@@ -430,7 +465,7 @@
 
         function initCashlessView() {
             navigateTo('cashlessView');
-            if (allHospitals.length > 0) return; // DB already in memory
+            if (allHospitals.length > 0) return;
 
             const stateContainer = document.getElementById('cashlessStateContainer');
             stateContainer.innerHTML = '<div class="text-center py-10 text-gray-400"><i class="fas fa-spinner fa-spin text-3xl mb-3 text-sbiBlue"></i><br><span class="text-sm font-medium">Looking for database...</span></div>';
@@ -499,7 +534,6 @@
             toggleCategoryFields();
         }
 
-        // --- FILTER & SEARCH LOGIC ---
         function toggleCategoryFields() {
             const cat = document.getElementById('searchCategory').value;
             
@@ -630,7 +664,6 @@
             container.innerHTML = html;
         }
 
-        // --- FULL EXPORT & SHARE LOGIC ---
         function getPDFDocument() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('landscape');
