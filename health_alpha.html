@@ -8,6 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
         :root { --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); --accent-color: #764ba2; --border-color: #e2e8f0; }
         body { margin: 0; background: #f0f4f8; font-family: 'Segoe UI', sans-serif; padding-bottom: 40px; }
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
@@ -48,7 +50,6 @@
         #results-container { display: none; margin-top: 40px; }
         .results-header { text-align: center; margin-bottom: 20px; color: var(--accent-color); font-weight: 800; font-size: 20px; }
         
-        /* UI GRID FIX FOR SQUISHED MOBILE CARDS */
         .premium-breakdown-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .premium-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border: 1px solid var(--border-color); display: flex; flex-direction: column; }
         .p-card-header { padding: 15px 5px; text-align: center; color: white; font-weight: 800; font-size: 14px; text-transform: uppercase; }
@@ -67,51 +68,33 @@
         .feat-val { font-size: 14px; color: #1e293b; font-weight: 600; }
         .feat-icon { color: var(--accent-color); margin-bottom: 5px; font-size: 16px; }
 
-        .result-actions-bar { display: flex; gap: 20px; margin-top: 30px; justify-content: center; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .result-actions-bar { display: flex; gap: 20px; justify-content: center; max-width: 900px; margin-left: auto; margin-right: auto; }
         @media (max-width: 600px) { .result-actions-bar { flex-direction: column; gap: 10px; } }
 
-        /* ======================================================== */
-        /* PDF OVERLAY - STYLING WITH BACKGROUNDS & TIERS */
-        /* ======================================================== */
+        /* CUSTOM ALERT MODAL TO REMOVE BROWSER DOMAIN TEXT */
+        .custom-alert-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); display: none; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(3px); }
+        .custom-alert-box { background: #fff; padding: 25px; border-radius: 16px; text-align: center; max-width: 340px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .custom-alert-icon { font-size: 40px; color: #ef4444; margin-bottom: 15px; }
+        .custom-alert-msg { font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 25px; line-height: 1.5; }
+        .custom-alert-btn { background: #1e293b; color: #fff; border: none; padding: 12px 35px; border-radius: 99px; font-weight: 700; font-size: 14px; cursor: pointer; transition: transform 0.1s ease; width: 100%; }
+        .custom-alert-btn:active { transform: scale(0.96); }
+        @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* PDF OVERLAY - STYLING */
         #pdf-overlay-root { display: none; position: absolute; left: -9999px; }
         .pdf-export-wrapper { width: 794px; background: white; margin: 0; padding: 0; line-height: 1.3;}
-        
         .pdf-cover-page { width: 794px; height: 1122px; overflow: hidden; }
         .pdf-cover-page img { width: 100%; height: 100%; object-fit: contain; }
-
-        .pdf-page-container { 
-            width: 794px; 
-            height: 1122px; 
-            background-image: url('alphabackground.png'); 
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            /* CRITICAL FIX: 240px bottom padding to stop content from covering the image */
-            padding: 30px 30px 240px 30px; 
-            box-sizing: border-box; 
-            display: flex; flex-direction: column;
-        }
-        
-        .pdf-content-wrapper { 
-            background: rgba(255, 255, 255, 0.94); /* Slightly opaque to ensure readability */
-            padding: 20px 25px; 
-            border-radius: 12px; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            flex: 1; /* Automatically stretches but obeys the bottom padding */
-            display: flex; flex-direction: column;
-        }
-
+        .pdf-page-container { width: 794px; height: 1122px; background-image: url('alphabackground.png'); background-size: 100% 100%; background-repeat: no-repeat; padding: 30px 30px 240px 30px; display: flex; flex-direction: column; }
+        .pdf-content-wrapper { background: rgba(255, 255, 255, 0.94); padding: 20px 25px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); flex: 1; display: flex; flex-direction: column; }
         .pdf-header-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #764ba2; padding-bottom: 5px; margin-bottom: 12px; }
         .pdf-title-main { font-size: 16px; font-weight: 900; color: #764ba2; text-transform: uppercase; }
         .pdf-subtitle { font-size: 10px; color: #475569; }
-
         .pdf-details-tbl { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 9px; }
         .pdf-details-tbl td { border: 1px solid rgba(203, 213, 225, 0.8); padding: 4px 6px; }
         .pdf-details-tbl td.lbl { background: rgba(248, 250, 252, 0.9); font-weight: 700; color: #475569; width: 15%; }
         .pdf-details-tbl td.val { width: 35%; font-weight: 600; color: #0f172a; background: rgba(255, 255, 255, 0.5); }
-
         .pdf-sec-title { font-size: 9px; font-weight: 800; color: #1e293b; text-transform: uppercase; background: rgba(241, 245, 249, 0.9); padding: 4px 8px; border-left: 4px solid #764ba2; margin-bottom: 8px; }
-
-        /* TIER TABLE */
         .pdf-tier-table { width: 100%; border-collapse: separate; border-spacing: 3px; margin-bottom: 15px; }
         .pdf-tier-table th { background: rgba(248, 250, 252, 0.95); border: 1px solid #cbd5e1; padding: 5px; font-size: 8px; font-weight: 800; color: #475569; text-transform: uppercase; border-radius: 4px; text-align: center;}
         .pdf-tier-table td { border: 1px solid #764ba2; background: rgba(253, 253, 253, 0.95); padding: 5px; text-align: center; border-radius: 4px; vertical-align: middle; }
@@ -119,32 +102,34 @@
         .tier-prem { font-size: 11px; font-weight: 900; color: #764ba2; }
         .tier-save { color: #16a34a; font-size: 8px; font-weight: 800; margin-top: 2px; }
         .si-sub { font-size: 7px; color: #64748b; font-weight: 600; display: block; text-transform: uppercase; margin-top: 1px;}
-
-        /* INBUILT FEATURES */
         .pdf-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 12px; margin-bottom: 15px; }
         .pdf-feat-box { display: flex; align-items: center; padding: 2px 0; border-bottom: 1px dotted rgba(203, 213, 225, 0.8); }
         .pdf-icon-wrap { color: #764ba2; font-size: 11px; width: 18px; text-align: left; flex-shrink: 0; margin-right: 4px; }
         .pdf-feat-text { display: flex; flex-direction: column; flex: 1; }
         .pdf-feat-l { font-size: 7px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 1px; }
         .pdf-feat-v { font-size: 8px; font-weight: 800; color: #0f172a; }
-
-        /* BOTTOM COLUMNS (FIX FOR MERGED TEXT) */
         .pdf-cols-wrapper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 5px; }
         .pdf-col { border: 1px solid rgba(226, 232, 240, 0.9); border-radius: 6px; padding: 8px; background: rgba(255, 255, 255, 0.8); }
         .pdf-col-h { font-size: 8px; font-weight: 800; color: #764ba2; text-transform: uppercase; text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 4px; }
         .pdf-row-item { display: flex; align-items: center; justify-content: space-between; font-size: 7.5px; padding: 3px 0; border-bottom: 1px dashed rgba(241, 245, 249, 0.8); }
         .pdf-row-item:last-child { border-bottom: none; }
-        
-        /* Strict sizing prevents right-side text from merging into left-side labels */
         .pdf-row-left { display: flex; align-items: center; max-width: 55%; } 
         .pdf-row-icon { color: #764ba2; font-size: 9px; width: 14px; text-align: left; flex-shrink: 0; margin-right: 4px; }
         .pdf-row-k { color: #555; font-weight: 600; line-height: 1.1; }
         .pdf-row-v { color: #000; font-weight: 800; max-width: 45%; text-align: right; line-height: 1.1; }
-
         .pdf-footer { margin-top: auto; padding-top: 6px; border-top: 1px solid #cbd5e1; font-size: 7px; color: #475569; text-align: justify; line-height: 1.3; }
     </style>
 </head>
 <body>
+    <!-- CUSTOM ALERT OVERLAY -->
+    <div id="customAlertOverlay" class="custom-alert-overlay">
+        <div class="custom-alert-box">
+            <i class="fas fa-exclamation-circle custom-alert-icon"></i>
+            <div id="customAlertMsg" class="custom-alert-msg"></div>
+            <button class="custom-alert-btn" onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+
     <div class="container">
         <header class="page-head">
             <h1>Health Alpha Select</h1>
@@ -222,10 +207,14 @@
         <div id="results-container">
             <div class="results-header">Detailed Premium Breakdown</div>
             
-            <!-- FIXED UI PREMIUM GRID -->
             <div class="premium-breakdown-grid" id="premiumGridTarget"></div>
 
-            <!-- RESTORED INBUILT FEATURES HTML FOR UI & PDF TO READ -->
+            <div class="result-actions-bar" style="margin-top: 0;">
+                <button id="pdfBtn" class="btn btn-green"><i class="fas fa-file-pdf"></i> Download Quote (PDF)</button>
+                <button id="waBtn" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Share on WhatsApp</button>
+            </div>
+            <div style="text-align:center; margin-top:15px; margin-bottom: 30px; font-size:11px; color:#94a3b8; font-style:italic;">Multi-year premiums account for age progression.</div>
+
             <div class="features-container" id="inbuilt-section">
                 <div class="section-title"><span class="tag"><i class="fas fa-check-circle"></i> Inbuilt Policy Benefits</span><span class="divider"></span></div>
                 <div class="feat-grid">
@@ -246,21 +235,17 @@
                 </div>
             </div>
 
-            <!-- RESTORED MODIFIERS & OPTIONALS -->
             <div class="features-container" id="modifiers-display-section"><div class="section-title"><span class="tag"><i class="fas fa-sliders-h"></i> Selected Modifiers</span><span class="divider"></span></div><div class="feat-grid" id="modifiers-grid-target"></div></div>
             <div class="features-container" id="optionals-display-section" style="display:none;"><div class="section-title"><span class="tag"><i class="fas fa-plus-circle"></i> Selected Optional Benefits</span><span class="divider"></span></div><div class="feat-grid" id="optionals-grid-target"></div></div>
-
-            <div class="result-actions-bar">
-                <button id="pdfBtn" class="btn btn-green"><i class="fas fa-file-pdf"></i> Download Quote (PDF)</button>
-                <button id="waBtn" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Share on WhatsApp</button>
-            </div>
-            <div style="text-align:center; margin-top:15px; font-size:11px; color:#94a3b8; font-style:italic;">Multi-year premiums account for age progression.</div>
         </div>
     </div>
 
     <div id="pdf-overlay-root"></div>
 
     <script>
+        function showAlert(msg) { document.getElementById('customAlertMsg').innerText = msg; document.getElementById('customAlertOverlay').style.display = 'flex'; }
+        function closeAlert() { document.getElementById('customAlertOverlay').style.display = 'none'; }
+
         // --- RATE TABLES ---
         const ROAD_AMB_BASE_RATES = { "0-17": 21.00, "18-25": 14.00, "26-30": 18.00, "31-35": 22.00, "36-40": 27.00, "41-45": 34.00, "46-50": 43.00, "51-55": 53.00, "56-60": 66.00, "61-65": 83.00, "66-70": 103.00, "71-75": 129.00, "76-80": 161.00, "81-85": 200.00, "85+": 250.00 };
         const ROAD_AMB_RELATIVITY = 0.65;
@@ -565,11 +550,11 @@
         }
 
         function calculateAndDisplay() {
-            if (document.querySelector('.input-error')) { alert("Please correct the highlighted age errors before calculating."); return; }
+            if (document.querySelector('.input-error')) { showAlert("Please correct the highlighted age errors before calculating."); return; }
             let membersAges = []; let isValid = true;
             document.querySelectorAll('.member-card').forEach(card => { const age = parseInt(card.querySelector('.age-input').value); if (isNaN(age)) isValid = false; membersAges.push(age); });
-            if(!isValid && membersAges.length > 0) { alert("Please enter ages for all members."); return; } 
-            else if (membersAges.length === 0) { alert("Please add members first."); return; }
+            if(!isValid && membersAges.length > 0) { showAlert("Please enter ages for all the members"); return; } 
+            else if (membersAges.length === 0) { showAlert("Please add members first."); return; }
 
             const siLabel = document.getElementById('sumInsured').value;
             const data = calculatePremiumFor(siLabel);
@@ -748,7 +733,7 @@
                     catch (err) { const url = URL.createObjectURL(pdfBlob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank'); }
                 } else {
                     const url = URL.createObjectURL(pdfBlob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click();
-                    alert("On this device/browser, we downloaded the PDF. Please attach it manually to WhatsApp.");
+                    showAlert("On this device/browser, we downloaded the PDF. Please attach it manually to WhatsApp.");
                     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
                 }
             }
