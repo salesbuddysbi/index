@@ -15,6 +15,10 @@
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         .card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         
+        .page-head { text-align: center; margin-bottom: 30px; padding: 20px 0; border-bottom: 2px dashed #cbd5e1; }
+        .page-head h1 { font-size: 32px; font-weight: 900; color: #1e293b; margin: 0; letter-spacing: -0.5px; }
+        .page-head h1 span { color: var(--accent-color); }
+
         .section-title { display: flex; align-items: center; margin-bottom: 16px; }
         .section-title .tag { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--accent-color); background: rgba(118, 75, 162, 0.1); padding: 6px 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px;}
         .section-title .divider { flex: 1; height: 2px; background: linear-gradient(to right, var(--border-color), transparent); margin-left: 12px;}
@@ -131,8 +135,9 @@
     </div>
 
     <div class="container">
+        <!-- HEADER WITH REQUESTED ELEMENTS REMOVED -->
         <header class="page-head">
-            <h1>Health Alpha Select</h1>
+            <h1>Health Alpha <span>Select</span></h1>
         </header>
 
         <section class="card" id="basic-section">
@@ -561,6 +566,8 @@
             const gridTarget = document.getElementById('premiumGridTarget');
             gridTarget.innerHTML = ''; 
 
+            const selectedTenure = parseInt(document.getElementById('tenure').value) || 1;
+
             for (let yr = 1; yr <= 5; yr++) {
                 let yrData = data[yr-1];
                 const headerClass = (yr % 2 === 0) ? 'header-blue' : 'header-purple';
@@ -576,7 +583,11 @@
                     </div>
                 </div>`;
                 gridTarget.innerHTML += cardHTML;
-                if(yr === 1) window.lastCalculatedPremium = yrData.prem;
+                
+                // Store the premium specific to the selected tenure for WhatsApp sharing
+                if(yr === selectedTenure) {
+                    window.selectedTenurePremium = yrData.prem;
+                }
             }
 
             const optGrid = document.getElementById('optionals-grid-target'); optGrid.innerHTML = '';
@@ -707,7 +718,9 @@
             const policyType = document.getElementById('policyType').value;
             const combination = document.getElementById('combination').value;
             const zone = document.getElementById('zone').value;
-            const tenure = document.getElementById('tenure').options[document.getElementById('tenure').selectedIndex].text;
+            
+            const tenureSelect = document.getElementById('tenure');
+            const tenureText = tenureSelect.options[tenureSelect.selectedIndex].text;
             
             let membersStr = []; let waAges = [];
             document.querySelectorAll('.member-card').forEach(card => {
@@ -716,17 +729,17 @@
             });
             const waMemStr = waAges.join(', ');
             
-            let final1Yr = "N/A";
-            if (window.lastCalculatedPremium) final1Yr = "₹ " + window.lastCalculatedPremium.toLocaleString('en-IN');
+            let finalPremium = "N/A";
+            if (window.selectedTenurePremium) finalPremium = "₹ " + window.selectedTenurePremium.toLocaleString('en-IN');
 
-            const pdfBlob = await generatePDFBlob(customerName, si, policyType, combination, zone, tenure, membersStr);
+            const pdfBlob = await generatePDFBlob(customerName, si, policyType, combination, zone, tenureText, membersStr);
             const fileName = `Health_Alpha_Quote_${customerName}.pdf`;
 
             if (actionType === 'download') {
                 const url = URL.createObjectURL(pdfBlob);
                 const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
             } else if (actionType === 'whatsapp') {
-                const msg = `*Health Alpha Select Quote* 🏥\n\n*Customer Name:* ${customerName}\n*1 Yr Total Premium:* ${final1Yr} \n-----------------------------\n*Sum Insured:* ${si}\n*Policy Type:* ${policyType}\n*Zone / Tenure:* ${zone} / ${tenure}\n*Combination:* ${combination}\n*Member Ages:* ${waMemStr}\n-----------------------------\n_Please find the attached quote for more details_`;
+                const msg = `*Health Alpha Select Quote* 🏥\n\n*Customer Name:* ${customerName}\n*${tenureText} Total Premium:* ${finalPremium} \n-----------------------------\n*Sum Insured:* ${si}\n*Policy Type:* ${policyType}\n*Zone / Tenure:* ${zone} / ${tenureText}\n*Combination:* ${combination}\n*Member Ages:* ${waMemStr}\n-----------------------------\n_Please find the attached quote for more details_`;
                 const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try { await navigator.share({ files: [file], title: 'Health Alpha Quote', text: msg }); } 
