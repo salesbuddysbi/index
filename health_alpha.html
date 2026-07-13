@@ -45,11 +45,11 @@
         .band-pill { display: inline-block; background: #1e293b; color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 99px; font-weight: 700; margin-bottom: 8px; }
 
         .actions { display: flex; gap: 12px; justify-content: center; margin-top: 10px; }
-        .btn { border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s ease; }
+        .btn { border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap:8px; }
         .btn-primary { background: var(--primary-gradient); color: #fff; }
         .btn-grey { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
         .btn-green { background: #10b981; color: white; width: 100%; margin-top: 10px; }
-        .btn-whatsapp { background: #25D366; color: white; width: 100%; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap:8px;}
+        .btn-whatsapp { background: #25D366; color: white; width: 100%; margin-top: 10px; }
 
         #results-container { display: none; margin-top: 40px; }
         .results-header { text-align: center; margin-bottom: 20px; color: var(--accent-color); font-weight: 800; font-size: 20px; }
@@ -75,7 +75,7 @@
         .result-actions-bar { display: flex; gap: 20px; justify-content: center; max-width: 900px; margin-left: auto; margin-right: auto; }
         @media (max-width: 600px) { .result-actions-bar { flex-direction: column; gap: 10px; } }
 
-        /* CUSTOM ALERT MODAL TO REMOVE BROWSER DOMAIN TEXT */
+        /* CUSTOM ALERT & SALES MODAL OVERLAYS */
         .custom-alert-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); display: none; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(3px); }
         .custom-alert-box { background: #fff; padding: 25px; border-radius: 16px; text-align: center; max-width: 340px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .custom-alert-icon { font-size: 40px; color: #ef4444; margin-bottom: 15px; }
@@ -121,7 +121,14 @@
         .pdf-row-icon { color: #764ba2; font-size: 9px; width: 14px; text-align: left; flex-shrink: 0; margin-right: 4px; }
         .pdf-row-k { color: #555; font-weight: 600; line-height: 1.1; }
         .pdf-row-v { color: #000; font-weight: 800; max-width: 45%; text-align: right; line-height: 1.1; }
-        .pdf-footer { margin-top: auto; padding-top: 6px; border-top: 1px solid #cbd5e1; font-size: 7px; color: #475569; text-align: justify; line-height: 1.3; }
+        
+        /* Sales Person Custom Signature Block */
+        .pdf-sales-signature { margin-top: auto; padding: 12px; background: rgba(118, 75, 162, 0.05); border: 1px dashed #764ba2; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .pdf-sales-signature .sales-title { font-size: 8px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
+        .pdf-sales-signature .sales-name { font-size: 14px; font-weight: 900; color: #764ba2; }
+        .pdf-sales-signature .sales-contact { font-size: 11px; font-weight: 800; color: #1e293b; text-align: right; }
+        
+        .pdf-footer { margin-top: 5px; padding-top: 6px; border-top: 1px solid #cbd5e1; font-size: 7px; color: #475569; text-align: justify; line-height: 1.3; }
     </style>
 </head>
 <body>
@@ -134,8 +141,30 @@
         </div>
     </div>
 
+    <!-- DYNAMIC SALES PERSON INTERCEPT MODAL -->
+    <div id="salesModalOverlay" class="custom-alert-overlay">
+        <div class="custom-alert-box" style="max-width: 380px;">
+            <i id="modalIcon" class="fas fa-file-invoice" style="font-size: 32px; color: var(--accent-color); margin-bottom: 15px;"></i>
+            <div class="results-header" style="margin-bottom: 20px; font-size: 18px;">Customize Your Quote</div>
+            
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label>Name (Optional)</label>
+                <input type="text" id="salesInputName" placeholder="e.g. John Doe">
+            </div>
+            
+            <div style="text-align: left; margin-bottom: 25px;">
+                <label>Contact Number (Optional)</label>
+                <input type="text" id="salesInputContact" placeholder="e.g. +91 9876543210">
+            </div>
+            
+            <div class="actions" style="margin-top: 0; flex-direction: row;">
+                <button class="btn btn-grey" onclick="closeSalesModal()" style="flex: 1; padding: 12px 10px;">Cancel</button>
+                <button id="modalSubmitBtn" class="btn btn-primary" onclick="submitSalesModal()" style="flex: 2; margin-top: 0; padding: 12px 10px;"><i class="fas fa-check"></i> Generate</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
-        <!-- HEADER WITH REQUESTED ELEMENTS REMOVED -->
         <header class="page-head">
             <h1>Health Alpha <span>Select</span></h1>
         </header>
@@ -250,6 +279,38 @@
     <script>
         function showAlert(msg) { document.getElementById('customAlertMsg').innerText = msg; document.getElementById('customAlertOverlay').style.display = 'flex'; }
         function closeAlert() { document.getElementById('customAlertOverlay').style.display = 'none'; }
+        
+        // SALES PERSON MODAL HANDLERS
+        let pendingAction = ''; 
+
+        function openSalesModal(actionType) { 
+            pendingAction = actionType;
+            const icon = document.getElementById('modalIcon');
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            
+            if (actionType === 'whatsapp') {
+                icon.className = 'fab fa-whatsapp';
+                icon.style.color = '#25D366';
+                submitBtn.className = 'btn btn-whatsapp';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Generate & Share';
+            } else {
+                icon.className = 'fas fa-file-pdf';
+                icon.style.color = '#10b981';
+                submitBtn.className = 'btn btn-green';
+                submitBtn.innerHTML = '<i class="fas fa-download"></i> Download PDF';
+            }
+            document.getElementById('salesModalOverlay').style.display = 'flex'; 
+        }
+
+        function closeSalesModal() { document.getElementById('salesModalOverlay').style.display = 'none'; }
+
+        function submitSalesModal() {
+            closeSalesModal();
+            const sName = document.getElementById('salesInputName').value.trim();
+            const sPhone = document.getElementById('salesInputContact').value.trim();
+            
+            handlePdfAction(pendingAction, sName, sPhone);
+        }
 
         // --- RATE TABLES ---
         const ROAD_AMB_BASE_RATES = { "0-17": 21.00, "18-25": 14.00, "26-30": 18.00, "31-35": 22.00, "36-40": 27.00, "41-45": 34.00, "46-50": 43.00, "51-55": 53.00, "56-60": 66.00, "61-65": 83.00, "66-70": 103.00, "71-75": 129.00, "76-80": 161.00, "81-85": 200.00, "85+": 250.00 };
@@ -584,7 +645,6 @@
                 </div>`;
                 gridTarget.innerHTML += cardHTML;
                 
-                // Store the premium specific to the selected tenure for WhatsApp sharing
                 if(yr === selectedTenure) {
                     window.selectedTenurePremium = yrData.prem;
                 }
@@ -610,7 +670,7 @@
         }
         document.getElementById('calcBtn').addEventListener('click', calculateAndDisplay);
 
-        async function generatePDFBlob(customerName, si, policyType, combination, zone, tenure, membersStr) {
+        async function generatePDFBlob(customerName, si, policyType, combination, zone, tenure, membersStr, salesName = '', salesContact = '') {
             const overlayRoot = document.getElementById('pdf-overlay-root');
             
             const baseSiLabel = document.getElementById('sumInsured').value;
@@ -666,6 +726,21 @@
             if(welcomeVal === 'Yes') discRows += addDiscRow('Welcome', 'Yes', 'fa-hand-holding-usd'); if(prefVal === 'Preferred Partner') discRows += addDiscRow('Preferred Net.', 'Yes', 'fa-hospital'); if(girlChildVal === 'Yes') discRows += addDiscRow('Girl Child', 'Yes', 'fa-child'); if(empVal === 'Yes') discRows += addDiscRow('SBI Emp.', 'Yes', 'fa-id-badge'); if(crossVal === 'Yes') discRows += addDiscRow('Cross-Sell', 'Yes', 'fa-exchange-alt'); if(zoneVal === 'Zone B') discRows += addDiscRow('Zone B', 'Yes', 'fa-map-marker-alt'); if(floaterDisp !== 'No') discRows += addDiscRow('Floater Disc.', floaterDisp, 'fa-users');
             let colDisc = `<div class="pdf-col"><div class="pdf-col-h">Discounts</div>${discRows}</div>`;
 
+            // SALES PERSON BLOCK
+            let salesBlockHTML = '';
+            if (salesName || salesContact) {
+                salesBlockHTML = `
+                <div class="pdf-sales-signature">
+                    <div>
+                        <div class="sales-title">Custom Quote Prepared By</div>
+                        <div class="sales-name">${salesName || 'Authorized Partner'}</div>
+                    </div>
+                    <div class="sales-contact">
+                        ${salesContact ? `<i class="fas fa-phone-alt"></i> ${salesContact}` : ''}
+                    </div>
+                </div>`;
+            }
+
             overlayRoot.innerHTML = `
                 <div class="pdf-export-wrapper" id="pdf-export-wrapper">
                     <div class="pdf-cover-page"><img src="alphacoverpage.png" alt="Cover Page"></div>
@@ -687,6 +762,9 @@
                             <div class="pdf-sec-title">3. Inbuilt Features</div>
                             ${inbuiltClean}
                             <div class="pdf-cols-wrapper">${colMod}${colOpt}${colDisc}</div>
+                            
+                            ${salesBlockHTML}
+                            
                             <div class="pdf-footer">*Disclaimer: This quote is indicative and based on the information provided. Final premium is subject to underwriting and health status. Benefits mentioned are subject to policy terms and conditions.</div>
                         </div>
                     </div>
@@ -712,7 +790,7 @@
             return pdfBlob;
         }
 
-        async function handlePdfAction(actionType) {
+        async function handlePdfAction(actionType, salesName = '', salesContact = '') {
             const customerName = document.getElementById('customerName').value || "Customer";
             const si = document.getElementById('sumInsured').value;
             const policyType = document.getElementById('policyType').value;
@@ -732,14 +810,21 @@
             let finalPremium = "N/A";
             if (window.selectedTenurePremium) finalPremium = "₹ " + window.selectedTenurePremium.toLocaleString('en-IN');
 
-            const pdfBlob = await generatePDFBlob(customerName, si, policyType, combination, zone, tenureText, membersStr);
+            const pdfBlob = await generatePDFBlob(customerName, si, policyType, combination, zone, tenureText, membersStr, salesName, salesContact);
             const fileName = `Health_Alpha_Quote_${customerName}.pdf`;
 
             if (actionType === 'download') {
                 const url = URL.createObjectURL(pdfBlob);
                 const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
             } else if (actionType === 'whatsapp') {
-                const msg = `*Health Alpha Select Quote* 🏥\n\n*Customer Name:* ${customerName}\n*${tenureText} Total Premium:* ${finalPremium} \n-----------------------------\n*Sum Insured:* ${si}\n*Policy Type:* ${policyType}\n*Zone / Tenure:* ${zone} / ${tenureText}\n*Combination:* ${combination}\n*Member Ages:* ${waMemStr}\n-----------------------------\n_Please find the attached quote for more details_`;
+                let salesFooter = '';
+                if (salesName || salesContact) {
+                    salesFooter = `\n-----------------------------\n*Quote Prepared By:*\n*Name:* ${salesName || 'Authorized Partner'}`;
+                    if (salesContact) salesFooter += `\n*Contact:* ${salesContact}`;
+                }
+
+                const msg = `*Health Alpha Select Quote* 🏥\n\n*Customer Name:* ${customerName}\n*${tenureText} Total Premium:* ${finalPremium} \n-----------------------------\n*Sum Insured:* ${si}\n*Policy Type:* ${policyType}\n*Zone / Tenure:* ${zone} / ${tenureText}\n*Combination:* ${combination}\n*Member Ages:* ${waMemStr}${salesFooter}\n-----------------------------\n_Please find the attached quote for more details_`;
+                
                 const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try { await navigator.share({ files: [file], title: 'Health Alpha Quote', text: msg }); } 
@@ -752,8 +837,10 @@
             }
         }
 
-        document.getElementById('pdfBtn').addEventListener('click', () => handlePdfAction('download'));
-        document.getElementById('waBtn').addEventListener('click', () => handlePdfAction('whatsapp'));
+        // Updated Listeners for PDF and WhatsApp
+        document.getElementById('pdfBtn').addEventListener('click', () => openSalesModal('download'));
+        document.getElementById('waBtn').addEventListener('click', () => openSalesModal('whatsapp'));
+        
         document.getElementById('genMembersBtn').addEventListener('click', renderMemberRows);
         document.getElementById('resetBtn').addEventListener('click', () => window.location.reload());
         document.getElementById('policyType').addEventListener('change', () => { enforcePolicyCombination(); renderMemberRows(); });
