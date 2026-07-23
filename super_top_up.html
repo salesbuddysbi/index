@@ -36,67 +36,8 @@
             padding-bottom: 40px;
         }
 
-        /* IMPORTANT: Lock the body so the background can't be scrolled */
         body.locked {
             overflow: hidden !important;
-        }
-
-        /* --- UNDER DEVELOPMENT OVERLAY STYLES --- */
-        .dev-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(15, 23, 42, 0.65); /* Slate 900 with transparency */
-            backdrop-filter: blur(5px); /* Premium glass effect */
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 999999; /* Absolute top layer */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .dev-modal {
-            background: var(--surface);
-            padding: 40px 30px;
-            border-radius: var(--radius-lg);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            border-top: 4px solid var(--accent-color);
-            animation: modalSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .dev-icon {
-            font-size: 42px;
-            color: var(--accent-color);
-            margin-bottom: 16px;
-        }
-
-        .dev-modal h2 {
-            margin: 0 0 12px 0;
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--text-main);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .dev-modal p {
-            margin: 0;
-            font-size: 15px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        @keyframes modalSlideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
@@ -123,8 +64,8 @@
         /* INPUTS */
         label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
         input[type="text"], input[type="number"], select { width: 100%; padding: 12px 16px; font-size: 14px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--surface-secondary); color: var(--text-main); transition: all 0.2s ease; appearance: none; }
-        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px; }
-        input:focus, select:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.1); background: #fff; }
+        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 40px; background-color: var(--surface-secondary); }
+        input:focus, select:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.1); background-color: #fff; }
         input[readonly] { cursor: not-allowed; background-color: #f1f5f9; }
 
         /* INPUT VALIDATION STYLES */
@@ -193,50 +134,83 @@
         .result-actions-bar { display: flex; gap: 20px; margin-top: 30px; justify-content: center; max-width: 900px; margin-left: auto; margin-right: auto; }
         @media (max-width: 600px) { .result-actions-bar { flex-direction: column; gap: 10px; } }
 
-        /* PDF OVERLAY */
-        #pdf-overlay-root { position: absolute; top: 0; left: 0; background: white; z-index: 10000; display: none; }
-        .pdf-page { width: 1120px; height: 780px; background: white; padding: 15px; box-sizing: border-box; border: 4px solid var(--accent-color); display: flex; flex-direction: column; font-family: 'Segoe UI', sans-serif; color: #333; overflow: hidden; }
-        .pdf-header-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent-color); padding-bottom: 4px; margin-bottom: 8px; }
-        .pdf-title-main { font-size: 16px; font-weight: 900; color: var(--accent-color); text-transform: uppercase; }
-        .pdf-subtitle { font-size: 11px; }
-        .pdf-details-tbl { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 8px; }
-        .pdf-details-tbl td { border: 1px solid #cbd5e1; padding: 3px 5px; }
-        .pdf-details-tbl td.lbl { background: #f8fafc; font-weight: 700; color: #475569; width: 15%; }
-        .pdf-details-tbl td.val { width: 35%; font-weight: 600; color: #0f172a; }
-        .pdf-sec-title { font-size: 9px; font-weight: 800; color: #1e293b; text-transform: uppercase; background: #f1f5f9; padding: 4px 8px; border-left: 4px solid var(--accent-color); margin-bottom: 8px; }
-        .pdf-prem-row { display: flex; gap: 6px; margin-bottom: 12px; }
-        .pdf-prem-box { flex: 1; border: 1px solid var(--accent-color); background: #fdfdfd; border-radius: 6px; padding: 4px; text-align: center; }
-        .pdf-prem-yr { font-size: 8px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
-        .pdf-prem-val { font-size: 14px; font-weight: 900; color: var(--accent-color); }
-        .pdf-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 10px; margin-bottom: 12px; }
-        .pdf-feat-box { display: flex; align-items: flex-start; gap: 6px; padding: 3px; border-bottom: 1px dotted #e2e8f0; }
-        .pdf-icon-wrap { color: var(--accent-color); font-size: 11px; width: 16px; text-align: center; padding-top: 1px; }
+        /* ==========================================
+           THE HEALTH ALPHA PDF CSS FIX - PORTRAIT
+           ========================================== */
+        #pdf-overlay-root { 
+            display: none; 
+            position: absolute; 
+            top: 0; 
+            left: -9999px; 
+        }
+
+        .pdf-cover-page {
+            width: 794px; /* A4 Portrait */
+            height: 1120px; /* Reduced by 3px to prevent accidental page overflow blank pages */
+            background: #ffffff;
+            padding: 0;
+            margin: 0;
+            border: none;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pdf-cover-page img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .pdf-page { 
+            width: 794px; /* Forced A4 Portrait dimensions */
+            height: 1120px; /* Reduced by 3px to prevent accidental page overflow blank pages */
+            page-break-before: always; /* Directly applied to page container to eliminate the blank page ghost div */
+            background: white; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            border: 4px solid var(--accent-color); 
+            display: flex; 
+            flex-direction: column; 
+            font-family: 'Segoe UI', sans-serif; 
+            color: #333; 
+            overflow: hidden; 
+        }
+
+        .pdf-header-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent-color); padding-bottom: 6px; margin-bottom: 12px; }
+        .pdf-title-main { font-size: 18px; font-weight: 900; color: var(--accent-color); text-transform: uppercase; }
+        .pdf-subtitle { font-size: 12px; }
+        .pdf-details-tbl { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10px; }
+        .pdf-details-tbl td { border: 1px solid #cbd5e1; padding: 4px 6px; }
+        .pdf-details-tbl td.lbl { background: #f8fafc; font-weight: 700; color: #475569; width: 20%; }
+        .pdf-details-tbl td.val { width: 30%; font-weight: 600; color: #0f172a; }
+        .pdf-sec-title { font-size: 11px; font-weight: 800; color: #1e293b; text-transform: uppercase; background: #f1f5f9; padding: 5px 10px; border-left: 4px solid var(--accent-color); margin-bottom: 10px; }
+        .pdf-prem-row { display: flex; gap: 8px; margin-bottom: 16px; }
+        .pdf-prem-box { flex: 1; border: 1px solid var(--accent-color); background: #fdfdfd; border-radius: 6px; padding: 6px; text-align: center; }
+        .pdf-prem-yr { font-size: 9px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 3px; }
+        .pdf-prem-val { font-size: 16px; font-weight: 900; color: var(--accent-color); }
+        .pdf-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 12px; margin-bottom: 16px; }
+        .pdf-feat-box { display: flex; align-items: flex-start; gap: 8px; padding: 4px; border-bottom: 1px dotted #e2e8f0; }
+        .pdf-icon-wrap { color: var(--accent-color); font-size: 12px; width: 18px; text-align: center; padding-top: 1px; }
         .pdf-feat-text { display: flex; flex-direction: column; }
-        .pdf-feat-l { font-size: 7px; font-weight: 700; color: #64748b; text-transform: uppercase; line-height: 1.1; }
-        .pdf-feat-v { font-size: 9px; font-weight: 700; color: #0f172a; line-height: 1.2; }
-        .pdf-cols-wrapper { display: flex; gap: 10px; flex: 1; }
-        .pdf-col { flex: 1; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px; background: #fff; }
-        .pdf-col-h { font-size: 9px; font-weight: 800; color: var(--accent-color); text-transform: uppercase; text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 5px; }
-        .pdf-row-item { display: flex; align-items: center; justify-content: space-between; font-size: 8px; padding: 2px 0; border-bottom: 1px dashed #f1f5f9; }
+        .pdf-feat-l { font-size: 8px; font-weight: 700; color: #64748b; text-transform: uppercase; line-height: 1.2; }
+        .pdf-feat-v { font-size: 10px; font-weight: 700; color: #0f172a; line-height: 1.3; }
+        .pdf-cols-wrapper { display: flex; gap: 12px; flex: 1; }
+        .pdf-col { flex: 1; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px; background: #fff; }
+        .pdf-col-h { font-size: 10px; font-weight: 800; color: var(--accent-color); text-transform: uppercase; text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 6px; }
+        .pdf-row-item { display: flex; align-items: center; justify-content: space-between; font-size: 9px; padding: 3px 0; border-bottom: 1px dashed #f1f5f9; }
         .pdf-row-item:last-child { border-bottom: none; }
-        .pdf-row-left { display: flex; align-items: center; gap: 5px; }
-        .pdf-row-icon { color: var(--accent-color); font-size: 9px; width: 12px; text-align: center; }
+        .pdf-row-left { display: flex; align-items: center; gap: 6px; }
+        .pdf-row-icon { color: var(--accent-color); font-size: 10px; width: 14px; text-align: center; }
         .pdf-row-k { color: #555; font-weight: 600; }
         .pdf-row-v { color: #000; font-weight: 700; }
-        .pdf-footer { margin-top: auto; padding-top: 4px; border-top: 1px solid #cbd5e1; font-size: 7px; color: #94a3b8; text-align: justify; line-height: 1.3; }
+        .pdf-footer { margin-top: auto; padding-top: 6px; border-top: 1px solid #cbd5e1; font-size: 9px; color: #94a3b8; text-align: justify; line-height: 1.4; }
     </style>
 </head>
-<body class="locked">
-
-    <div class="dev-overlay">
-        <div class="dev-modal">
-            <div class="dev-icon">
-                <i class="fas fa-lock"></i>
-            </div>
-            <h2>Under Development</h2>
-            <p>This Page is currently under development. Please reach out to your Manager to Quote Super Top-Up Premium.</p>
-        </div>
-    </div>
+<body class="">
 
     <div class="container">
         <header class="page-head">
@@ -247,7 +221,16 @@
             <div class="section-title"><span class="tag"><i class="fas fa-user-circle"></i> Basic Details</span><span class="divider"></span></div>
             <div class="grid">
                 <div class="col-12"><label>Customer Name</label><input type="text" id="customerName" placeholder="Enter Customer Name"></div>
-                <div class="col-6"><label>Variant</label><select id="variant"><option value="Plus" selected>Plus - Annual Aggregate Deductible</option><option value="Pro">Pro - Long Term Aggregate Deductible</option></select></div>
+                <div class="col-6">
+                    <label>Variant</label>
+                    <select id="variant">
+                        <option value="Plus" selected>Plus - Annual Aggregate Deductible</option>
+                        <option value="Pro">Pro - Long Term Aggregate Deductible</option>
+                    </select>
+                    <div id="proWarning" class="validation-msg" style="display: none; font-size: 12px; margin-top: 6px; font-weight: 600;">
+                        <i class="fas fa-exclamation-circle"></i> PRO variant is under construction. Please proceed with the Plus variant.
+                    </div>
+                </div>
                 
                 <div class="col-6">
                     <label>Deductible</label>
@@ -371,9 +354,6 @@
     <div id="pdf-overlay-root"></div>
 
     <script>
-        // Ensure body is explicitly locked when JS runs
-        document.body.classList.add('locked');
-
         // --- DEDUCTIBLE TO SUM INSURED MAPPING ---
         const DEDUCTIBLE_SI_MAPPING = {
             "5 Lac": ["5 Lac", "10 Lac", "15 Lac", "20 Lac", "25 Lac", "45 Lac", "70 Lac", "95 Lac"],
@@ -394,7 +374,6 @@
             "200 Lac": ["300 Lac"]
         };
 
-        // Absolute base rates from documentation require a neutral multiplier (1)
         const DEDUCTIBLE_DISCOUNT = {
             "5 Lac": 1, "6 Lac": 1, "7 Lac": 1, "7.5 Lac": 1, "8 Lac": 1,
             "9 Lac": 1, "10 Lac": 1, "12.5 Lac": 1, "15 Lac": 1, "20 Lac": 1, "25 Lac": 1, "30 Lac": 1, "50 Lac": 1,
@@ -560,7 +539,7 @@
                 "56-60": { 2500000: 4999, 5000000: 5915, 7500000: 6392, 10000000: 6911, 12500000: 7174 },
                 "61-65": { 2500000: 6641, 5000000: 7848, 7500000: 8495, 10000000: 9155, 12500000: 9491 },
                 "66-70": { 2500000: 8507, 5000000: 10008, 7500000: 10831, 10000000: 11415, 12500000: 11868 },
-                "71-75": { 2500000: 11340, 5000000: 13342, 7500000: 14459, 10000000: 15251, 12500000: 15865 },
+                "71-75": { 2500000: 11340, 5000000: 13342, 17500000: 14459, 10000000: 15251, 12500000: 15865 },
                 "76-80": { 2500000: 15182, 5000000: 17864, 7500000: 19379, 10000000: 20453, 12500000: 21286 },
                 "81-85": { 2500000: 19059, 5000000: 22424, 7500000: 24340, 10000000: 25700, 12500000: 26755 },
                 "85+":   { 2500000: 25656, 5000000: 30188, 7500000: 32788, 10000000: 34633, 12500000: 36064 }
@@ -640,7 +619,20 @@
         const membersWrap = document.getElementById('membersWrap');
         const membersError = document.getElementById('membersError');
 
-        // EVENT DELEGATION: Attach listeners ONCE to the parent container
+        function updateDiscountSelectStyle(element) {
+            if (element.value === "Yes") {
+                element.style.color = "var(--success-color)";
+                element.style.fontWeight = "700";
+                element.style.borderColor = "var(--success-color)";
+                element.style.backgroundColor = "#dcfce7";
+            } else {
+                element.style.color = "var(--text-main)";
+                element.style.fontWeight = "normal";
+                element.style.borderColor = "var(--border-color)";
+                element.style.backgroundColor = "var(--surface-secondary)";
+            }
+        }
+
         membersWrap.addEventListener('input', (e) => {
             if (e.target.classList.contains('age-input')) {
                 const role = e.target.getAttribute('data-role');
@@ -664,7 +656,13 @@
                     if (errorSpan) errorSpan.style.display = 'none'; 
                 }
 
-                // Trigger instant validation checks
+                // Default Paperless Discount to Yes when an age is entered and update its style
+                if (!isNaN(val)) {
+                    const paperlessSel = document.getElementById('paperlessDiscount');
+                    paperlessSel.value = "Yes";
+                    updateDiscountSelectStyle(paperlessSel);
+                }
+
                 checkGirlChildDiscount();
                 checkEarlyEntryDiscount();
             }
@@ -716,7 +714,6 @@
 
         function parseCombination(combo) { const parts = combo.split('+'); let adults = 0, children = 0; parts.forEach(p => { const n = parseInt(p); if (p.includes('A')) adults += n || 0; if (p.includes('C')) children += n || 0; }); return { adults, children }; }
 
-        // REFACTORED: Uses String Builder instead of iterative innerHTML injection
         function renderMemberRows() {
             const combo = document.getElementById('combination').value;
             const { adults, children } = parseCombination(combo);
@@ -746,7 +743,7 @@
                 </div>`;
             }
             
-            membersWrap.innerHTML = newHTML; // Single DOM write
+            membersWrap.innerHTML = newHTML; 
             
             updateOptionalVisibility(); 
             checkGirlChildDiscount(); 
@@ -796,7 +793,6 @@
         }
 
         function updateOptionalVisibility() {
-            // Unlimited Restore is now applicable for all variants and SI combinations
             document.getElementById('endlessContainer').style.display = 'block';
         }
 
@@ -833,10 +829,22 @@
             return "18-35"; 
         }
 
-        function getFloaterDiscount(memberCount) { if (memberCount === 2) return 0.25; if (memberCount === 3) return 0.30; if (memberCount > 3) return 0.35; return 0; }
+        // --- UPDATED FLOATER DISCOUNT LOGIC ---
+        function getFloaterDiscount(memberCount) { 
+            if (memberCount === 2) return 0.20; 
+            if (memberCount === 3) return 0.25; 
+            if (memberCount > 3) return 0.30; 
+            return 0; 
+        }
 
         function calculateAndDisplay() {
-            if (document.querySelector('.input-error')) { alert("Please correct the highlighted age errors before calculating."); return; }
+            // New strict check for the PRO variant
+            if (document.getElementById('variant').value === 'Pro') {
+                alert("The PRO variant is currently under construction. Please proceed with the Plus variant.");
+                return;
+            }
+
+            if (document.querySelector('.input-error')) { alert("Please correct the highlighted errors before calculating."); return; }
 
             const variant = document.getElementById('variant').value;
             const siLabel = document.getElementById('sumInsured').value;
@@ -877,16 +885,16 @@
             let roomRentDiscPercent = 0;
             const roomCat = document.getElementById('roomCategory').value;
             if (roomCat === "Single Pvt AC Room") roomRentDiscPercent = 0.075;
-            else if (roomCat === "Twin-Sharing") roomRentDiscPercent = 0.125; // 12.5%
+            else if (roomCat === "Twin-Sharing") roomRentDiscPercent = 0.125; 
             
             const pedWaitVal = document.getElementById('pedWait').value;
             let pedModifier = 0;
-            if (pedWaitVal === "3 Year") pedModifier = 0.15; // 15% Discount
-            else if (pedWaitVal === "1 Year") pedModifier = -0.30; // 30% Loading
+            if (pedWaitVal === "3 Year") pedModifier = 0.15; 
+            else if (pedWaitVal === "1 Year") pedModifier = -0.30; 
             
             const specWaitVal = document.getElementById('specWait').value;
             let specWaitLoading = 0;
-            if (specWaitVal === "1 Year") specWaitLoading = 0.10; // 10% Loading
+            if (specWaitVal === "1 Year") specWaitLoading = 0.10; 
 
             const consumablesOpt = document.getElementById('consumables').value;
             const endlessOpt = document.getElementById('endless').value;
@@ -903,7 +911,6 @@
             let startYr = (variant === 'Pro') ? 2 : 1;
             let endYr = 3; 
 
-            // REFACTORED: Single DOM write string builder
             let finalGridHTML = '';
 
             for (let yr = startYr; yr <= endYr; yr++) {
@@ -922,22 +929,17 @@
                 });
 
                 if(healthCheckOpt !== 'Not Opted') {
-                    // Flat ₹192 per member for Health Check
                     y_hc = 192 * membersAges.length;
                 }
 
-                // --- SEQUENTIAL MATH LOGIC ---
-
-                // 1. Calculate Room Rent Discount first
                 let y_room = y_base * roomRentDiscPercent;
                 let base_after_room = y_base - y_room;
 
-                // 2. Calculate PED & Spec Modifiers against the balance after room rent
                 let y_ped = 0;
                 if (pedModifier > 0) {
-                    y_ped = -1 * (base_after_room * pedModifier); // Calculate discount
+                    y_ped = -1 * (base_after_room * pedModifier); 
                 } else {
-                    y_ped = base_after_room * Math.abs(pedModifier); // Calculate loading
+                    y_ped = base_after_room * Math.abs(pedModifier); 
                 }
                 
                 let y_spec = base_after_room * specWaitLoading;
@@ -945,13 +947,9 @@
                 totalAccumulated.room += y_room;
                 if(y_ped < 0) totalAccumulated.ped += Math.abs(y_ped); 
 
-                // 3. Derived Value (Balance after room rent + PED/Spec adjustments)
                 let y_baseForLoad = base_after_room + y_ped + y_spec;
                 
-                // 4. Consumables: 10% of the newly Derived Value
                 let y_consumables = consumablesOpt === 'Yes' ? y_baseForLoad * 0.10 : 0;
-                
-                // 5. Unlimited Restore: 10% of the newly Derived Value
                 let y_endless = endlessOpt === 'Yes' ? y_baseForLoad * 0.10 : 0;
 
                 let y_groupA = y_baseForLoad + y_consumables + y_endless;
@@ -1045,7 +1043,6 @@
                 </div>`;
             }
 
-            // Single DOM insertion
             gridTarget.innerHTML = finalGridHTML;
 
             updateOptedBenefitsUI(); 
@@ -1161,43 +1158,64 @@
             let colDisc = `<div class="pdf-col"><div class="pdf-col-h">Discounts</div>${discRows}</div>`;
 
             overlayRoot.innerHTML = `
-                <div class="pdf-page" id="pdf-page-content">
-                    <div class="pdf-header-row">
-                        <div>
-                            <div class="pdf-title-main">Super Top Up</div>
-                            <div class="pdf-subtitle">Premium Quote Calculation</div>
-                        </div>
-                        <div style="text-align:right;">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpFkxL3TkvBl2a1hu_Z8gwhK2mBuZBlbYD9ql3gAl6RkDFhMQG7AISp6Sb&s=10" style="height: 40px; margin-bottom:5px;" alt="Logo"><br>
-                            <div style="font-size:11px;">Date: ${new Date().toLocaleDateString()}</div>
-                        </div>
+                <div id="pdf-render-target">
+                    <div class="pdf-cover-page">
+                        <img src="./supertopupcoverpage.jpg" 
+                             onerror="this.onerror=null; this.src='./supertopupcoverpage.png'; this.onerror=function(){ this.style.display='none'; this.parentNode.innerHTML='<div style=\\\'font-size:24px; color:#94a3b8; margin:auto;\\\'>Cover Page Not Found</div>'; };" 
+                             alt="Cover Page">
                     </div>
-                    <div class="pdf-sec-title">1. Quote Details</div>
-                    <table class="pdf-details-tbl">
-                        <tr><td class="lbl">Customer</td><td class="val">${customerName}</td><td class="lbl">Sum Insured</td><td class="val">${si}</td></tr>
-                        <tr><td class="lbl">Variant</td><td class="val">${variant}</td><td class="lbl">Deductible</td><td class="val">${deductible}</td></tr>
-                        <tr><td class="lbl">Type</td><td class="val">${policyType}</td><td class="lbl">Combination</td><td class="val">${combination}</td></tr>
-                        <tr><td class="lbl">Tenure</td><td class="val">${tenure}</td><td class="lbl">Members</td><td class="val">${membersStr.join(', ')}</td></tr>
-                    </table>
-                    <div class="pdf-sec-title">2. Premium Summary (Cumulative)</div>
-                    ${premStrip}
-                    <div class="pdf-sec-title">3. Inbuilt Features</div>
-                    ${inbuiltClean}
-                    <div class="pdf-cols-wrapper">
-                        ${colMod}
-                        ${colOpt}
-                        ${colDisc}
+                    <div class="pdf-page" id="pdf-page-content">
+                        <div class="pdf-header-row">
+                            <div>
+                                <div class="pdf-title-main">Super Top Up</div>
+                                <div class="pdf-subtitle">Premium Quote Calculation</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpFkxL3TkvBl2a1hu_Z8gwhK2mBuZBlbYD9ql3gAl6RkDFhMQG7AISp6Sb&s=10" style="height: 45px; margin-bottom:5px;" alt="Logo"><br>
+                                <div style="font-size:12px;">Date: ${new Date().toLocaleDateString()}</div>
+                            </div>
+                        </div>
+                        <div class="pdf-sec-title">1. Quote Details</div>
+                        <table class="pdf-details-tbl">
+                            <tr><td class="lbl">Customer</td><td class="val">${customerName}</td><td class="lbl">Sum Insured</td><td class="val">${si}</td></tr>
+                            <tr><td class="lbl">Variant</td><td class="val">${variant}</td><td class="lbl">Deductible</td><td class="val">${deductible}</td></tr>
+                            <tr><td class="lbl">Type</td><td class="val">${policyType}</td><td class="lbl">Combination</td><td class="val">${combination}</td></tr>
+                            <tr><td class="lbl">Tenure</td><td class="val">${tenure}</td><td class="lbl">Members</td><td class="val">${membersStr.join(', ')}</td></tr>
+                        </table>
+                        <div class="pdf-sec-title">2. Premium Summary (Cumulative)</div>
+                        ${premStrip}
+                        <div class="pdf-sec-title">3. Inbuilt Features</div>
+                        ${inbuiltClean}
+                        <div class="pdf-cols-wrapper">
+                            ${colMod}
+                            ${colOpt}
+                            ${colDisc}
+                        </div>
+                        <div class="pdf-footer">*Disclaimer: This quote is indicative and based on the information provided. Final premium is subject to underwriting and health status. Benefits mentioned are subject to policy terms and conditions.</div>
                     </div>
-                    <div class="pdf-footer">*Disclaimer: This quote is indicative and based on the information provided. Final premium is subject to underwriting and health status. Benefits mentioned are subject to policy terms and conditions.</div>
                 </div>
             `;
 
-            overlayRoot.style.display = 'flex'; window.scrollTo(0, 0);
-            const element = document.getElementById('pdf-page-content');
-            const opt = { margin: 0, filename: `Super_Top_Up_Quote_${customerName}.pdf`, image: { type: 'jpeg', quality: 0.99 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'px', format: [1123, 794], orientation: 'landscape' } };
-            await new Promise(resolve => setTimeout(resolve, 500));
+            overlayRoot.style.display = 'block'; 
+            window.scrollTo(0, 0);
+            
+            const element = document.getElementById('pdf-render-target');
+            const opt = { 
+                margin: 0, 
+                filename: `Super_Top_Up_Quote_${customerName}.pdf`, 
+                image: { type: 'jpeg', quality: 0.99 }, 
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollY: 0 }, 
+                jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'] }
+            };
+            
+            // Allow 800ms to ensure the local cover page image fetches perfectly
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
             const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
+            
             overlayRoot.style.display = 'none';
+            
             return pdfBlob;
         }
 
@@ -1245,6 +1263,11 @@
             }
         }
 
+        // Attach listeners to all discount dropdowns to handle styling when manually changed
+        document.querySelectorAll('#discounts-section select').forEach(sel => {
+            sel.addEventListener('change', (e) => updateDiscountSelectStyle(e.target));
+        });
+
         document.getElementById('pdfBtn').addEventListener('click', () => handlePdfAction('download'));
         document.getElementById('waBtn').addEventListener('click', () => handlePdfAction('whatsapp'));
         document.getElementById('genMembersBtn').addEventListener('click', renderMemberRows);
@@ -1253,7 +1276,19 @@
         document.getElementById('combination').addEventListener('change', renderMemberRows);
         document.getElementById('sumInsured').addEventListener('change', updateOptionalVisibility);
         document.getElementById('deductible').addEventListener('change', updateSumInsuredOptions);
-        document.getElementById('variant').addEventListener('change', updateTenureOptions);
+        
+        // Listen to variant change to show warning
+        document.getElementById('variant').addEventListener('change', (e) => {
+            updateTenureOptions();
+            const warningMsg = document.getElementById('proWarning');
+            if (e.target.value === 'Pro') {
+                warningMsg.style.display = 'block';
+                e.target.classList.add('input-error');
+            } else {
+                warningMsg.style.display = 'none';
+                e.target.classList.remove('input-error');
+            }
+        });
 
         updateTenureOptions();
         updateSumInsuredOptions(); 
