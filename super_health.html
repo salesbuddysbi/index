@@ -95,6 +95,12 @@
             border-color: var(--secondary);
             outline: none;
         }
+        
+        input[readonly] { 
+            cursor: not-allowed; 
+            background-color: #e2e8f0; 
+            opacity: 0.7; 
+        }
 
         .btn-calc {
             background-color: var(--secondary);
@@ -318,7 +324,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(45, 55, 72, 0.7); /* Darker backdrop to match image */
+            background: rgba(45, 55, 72, 0.7); 
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -472,8 +478,18 @@
             </div>
 
             <div class="form-group">
-                <label id="ageLabel">Age of Eldest Member (Years)</label>
-                <input type="number" id="age" min="18" max="99" placeholder="e.g. 35" required>
+                <label id="ageLabel">DOB or Age of Eldest Member</label>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <input type="text" id="dob" placeholder="DD-MM-YYYY" maxlength="10">
+                    </div>
+                    <div style="display: flex; align-items: center; font-weight: 800; font-size: 12px; color: #94a3b8;">
+                        OR
+                    </div>
+                    <div style="flex: 1;">
+                        <input type="number" id="age" min="18" max="99" placeholder="Age (e.g. 35)" required>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -819,6 +835,56 @@
         if (variant === "Prime" || variant === "Elite" || variant === "Premier") return 1031.0;
         if (variant === "Platinum" || variant === "PlatinumInfinite") return 1417.0;
         return 0; 
+    }
+
+    function calculateAgeFromDOB(dobStr) {
+        const parts = dobStr.split('-');
+        if(parts.length !== 3) return null;
+        const d = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1;
+        const y = parseInt(parts[2], 10);
+        const dob = new Date(y, m, d);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const mDiff = today.getMonth() - dob.getMonth();
+        if (mDiff < 0 || (mDiff === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        return age < 0 ? 0 : age;
+    }
+
+    function bindDOBAndAge() {
+        const ageEl = document.getElementById('age');
+        const dobEl = document.getElementById('dob');
+        
+        ageEl.addEventListener('input', (e) => {
+            if (!ageEl.hasAttribute('readonly')) {
+                if (e.target.value !== '') dobEl.setAttribute('readonly', true);
+                else dobEl.removeAttribute('readonly');
+            }
+        });
+
+        dobEl.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, ''); 
+            if (val.length > 2) val = val.substring(0, 2) + '-' + val.substring(2);
+            if (val.length > 5) val = val.substring(0, 5) + '-' + val.substring(5, 9);
+            e.target.value = val;
+
+            if (val.length > 0) {
+                ageEl.setAttribute('readonly', true);
+                if (val.length === 10) {
+                    const age = calculateAgeFromDOB(val);
+                    if(age !== null && !isNaN(age)) {
+                        ageEl.value = age;
+                    }
+                } else {
+                    ageEl.value = '';
+                }
+            } else {
+                ageEl.removeAttribute('readonly');
+                ageEl.value = '';
+            }
+        });
     }
     
     function setPolicyType(type) {
@@ -1504,6 +1570,7 @@
     window.onload = function() {
         setPolicyType('individual');
         handleVariantChange();
+        bindDOBAndAge();
     };
 
 </script>
