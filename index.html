@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- STATIC, BULLETPROOF CSS CDN (Cannot be blocked by firewalls) -->
+    <!-- STATIC, BULLETPROOF CSS CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 
     <!-- CSV Parser & PDF Generators -->
@@ -50,6 +50,18 @@
         .border-l-sbiPurple { border-left-color: var(--sbiPurple); }
         .border-l-sbiBlue { border-left-color: var(--sbiBlue); }
 
+        /* SBI Brand Gradient Classes */
+        .bg-sbi-gradient {
+            background: linear-gradient(135deg, var(--sbiPurple) 0%, var(--sbiBlue) 100%);
+        }
+        
+        .text-sbi-gradient {
+            background: linear-gradient(135deg, var(--sbiPurple) 0%, var(--sbiBlue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         /* Extended Color Overrides */
         .text-orange-500 { color: #f97316; }
         .bg-orange-50 { background-color: #fff7ed; }
@@ -69,7 +81,7 @@
         .min-h-100dvh { min-height: 100vh; min-height: 100dvh; }
         
         .text-8px { font-size: 8px; }
-        .text-9px { font-size: 9px; line-height: 1; }
+        .text-9px { font-size: 9px; line-height: 1.4; } 
         .text-10px { font-size: 10px; }
         .text-15px { font-size: 15px; }
         .text-26px { font-size: 26px; }
@@ -105,40 +117,66 @@
 <body class="bg-sbiLight text-sbiDark font-sans antialiased overflow-x-hidden selection:bg-sbiBlue selection:text-white flex flex-col min-h-100dvh">
 
     <!-- APP HEADER -->
-    <nav class="fixed top-0 left-0 w-full z-50 bg-white shadow-sm border-b border-gray-100 h-16 flex items-center">
+    <nav id="main-nav" class="fixed top-0 left-0 w-full z-50 bg-white shadow-sm border-b border-gray-100 h-16 flex items-center hidden">
         <div class="px-3 md:px-4 w-full max-w-3xl mx-auto flex justify-between items-center">
             
-            <!-- Logo Section -->
             <div class="flex flex-col justify-center cursor-pointer" onclick="navigateTo('homeView')">
-                <span class="font-extrabold text-sbiPurple text-lg md:text-xl leading-none tracking-tight">Sales Buddy</span>
+                <span class="font-extrabold text-sbi-gradient text-lg md:text-xl leading-none tracking-tight">Sales Buddy</span>
                 <span class="font-bold text-gray-400 text-9px uppercase tracking-02em mt-0.5">One Touch Point</span>
             </div>
             
-            <!-- Quick Actions Section -->
             <div class="flex items-center gap-1.5 md:gap-2">
                 <a href="https://dip.sbigeneral.in/Login/LoginSBI" target="_blank" class="bg-simba active:bg-orange-600 text-white px-3.5 py-1.5 md:px-5 md:py-2 rounded-full text-xs md:text-sm font-bold shadow flex items-center gap-1.5 md:gap-2 transition-colors tracking-wide">
                     <i class="fas fa-sign-in-alt"></i> SIMBA
                 </a>
-                <!-- New Endorsement Button Added Here with target="_blank" -->
-                <a href="https://www.sbigeneral.in/endorsement" target="_blank" rel="noopener noreferrer" class="bg-sbiPurple active:bg-purple-800 text-white px-3.5 py-1.5 md:px-5 md:py-2 rounded-full text-xs md:text-sm font-bold shadow flex items-center gap-1.5 md:gap-2 transition-colors tracking-wide">
+                <a href="https://www.sbigeneral.in/endorsement" target="_blank" rel="noopener noreferrer" class="bg-sbi-gradient text-white px-3.5 py-1.5 md:px-5 md:py-2 rounded-full text-xs md:text-sm font-bold shadow flex items-center gap-1.5 md:gap-2 transition-transform active:scale-95 tracking-wide">
                     <i class="fas fa-edit"></i> Endorse
                 </a>
             </div>
-
         </div>
     </nav>
 
     <!-- MAIN APP CONTAINER -->
     <main id="app-container" class="flex-grow flex flex-col pt-16">
         
+        <!-- 0. WELCOME / LOGIN VIEW -->
+        <div id="welcomeScreenView" class="app-view flex flex-col items-center justify-center min-h-[80vh] px-5 w-full max-w-3xl mx-auto transition-opacity duration-300 absolute top-0 left-0 right-0 bottom-0 bg-sbiLight z-40 -mt-16 pt-16">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-100 w-full text-center max-w-md">
+                <div class="w-16 h-16 bg-purple-50 text-sbiPurple rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border-2 border-purple-100">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold text-sbiDark tracking-tight mb-2">Welcome to Sales Buddy</h1>
+                <p class="text-sm text-gray-500 mb-6 leading-relaxed">Enter your Professional Name to Access portal</p>
+                
+                <div class="text-left mb-3">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wide ml-1">Your Full Name</label>
+                    <input type="text" id="userNameInput" placeholder="e.g. John Doe" class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold outline-none focus:border-sbiPurple focus:ring-1 focus:ring-sbiPurple transition-all text-center">
+                </div>
+                
+                <!-- Disclaimer -->
+                <div class="text-left bg-purple-50 p-3 rounded-lg border border-purple-100 mb-5">
+                    <p class="text-9px font-semibold text-sbiPurple leading-normal text-center">
+                        <i class="fas fa-info-circle mr-1"></i> <strong>Important:</strong> The name provided will be locked for the entire day and cannot be modified. This exact name will automatically appear on all Quotes generated today, so please ensure it is entered accurately.
+                    </p>
+                </div>
+
+                <p id="nameError" class="text-xs text-red-500 hidden mb-4 font-medium"><i class="fas fa-exclamation-circle"></i> Please enter a valid name (minimum 3 alphabetical characters; no numbers or special symbols).</p>
+                
+                <!-- Main CTA -->
+                <button onclick="saveAndEnter()" class="w-full bg-sbi-gradient text-white px-5 py-3 rounded-xl text-sm font-bold shadow-md active:scale-98 transition-transform flex justify-center items-center gap-2">
+                    Enter Dashboard <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
         <!-- 1. DASHBOARD (HOME VIEW) -->
-        <div id="homeView" class="app-view flex flex-col flex-grow transition-opacity duration-300 w-full max-w-3xl mx-auto">
+        <div id="homeView" class="app-view hidden flex flex-col flex-grow transition-opacity duration-300 w-full max-w-3xl mx-auto">
 
             <div class="px-5 flex-grow mt-6">
                 
                 <div class="mb-6">
-                    <h1 class="text-26px font-extrabold text-sbiDark tracking-tight">Welcome back!</h1>
-                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">Wishing you a wonderful day! Please choose an option below to continue.</p>
+                    <h1 id="greeting-title" class="text-26px font-extrabold text-sbiDark tracking-tight">Welcome!</h1>
+                    <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">Have a productive day! Please select a module below to proceed.</p>
                 </div>
 
                 <div class="flex flex-col gap-3">
@@ -161,7 +199,7 @@
                     <div class="glass-card p-3-5 rounded-2xl active-scale-98 transition-transform cursor-pointer border-l-4 border-l-green-500 flex items-center gap-3-5" onclick="initCashlessView()">
                         <div class="w-11 h-11 bg-green-50 text-green-500 rounded-full flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-hospital-user"></i></div>
                         <div>
-                            <h3 class="text-15px font-bold text-gray-900 leading-tight">Cashless Hospital</h3>
+                            <h3 class="text-15px font-bold text-gray-900 leading-tight">Cashless Hospitals</h3>
                         </div>
                         <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                     </div>
@@ -169,7 +207,7 @@
                     <div class="glass-card p-3-5 rounded-2xl active-scale-98 transition-transform cursor-pointer border-l-4 border-l-orange-500 flex items-center gap-3-5" onclick="navigateTo('downloadsPageView')">
                         <div class="w-11 h-11 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-download"></i></div>
                         <div>
-                            <h3 class="text-15px font-bold text-gray-900 leading-tight">Downloads</h3>
+                            <h3 class="text-15px font-bold text-gray-900 leading-tight">Resource Downloads</h3>
                         </div>
                         <i class="fas fa-chevron-right text-gray-300 ml-auto text-sm"></i>
                     </div>
@@ -178,7 +216,7 @@
 
             <footer class="mt-8 bg-footerDark pt-4 pb-5 px-5 w-full rounded-t-2xl">
                 <div class="w-full max-w-md mx-auto">
-                    <h3 class="text-sbiBlue font-semibold text-sm mb-3">Customer App</h3>
+                    <h3 class="text-sbiBlue font-semibold text-sm mb-3">Customer Applications</h3>
                     <div class="grid grid-cols-2 gap-3 mb-3">
                         <a href="https://apps.apple.com/in/app/sbi-general-insurance/id1495616048" target="_blank" class="bg-white text-black py-2 px-2 rounded-lg flex items-center justify-center gap-2 active:bg-gray-200 transition-colors">
                             <i class="fab fa-apple text-2xl"></i>
@@ -205,7 +243,7 @@
         <!-- 2. QUOTE PAGE VIEW -->
         <div id="quotePageView" class="app-view hidden flex-grow px-5 pt-6 transition-opacity duration-300 w-full max-w-3xl mx-auto">
             <button onclick="navigateTo('homeView')" class="mb-5 bg-white text-gray-600 active:bg-gray-100 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 shadow-sm border border-gray-100 w-max">
-                <i class="fas fa-arrow-left"></i> Back
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
             </button>
             <div class="mb-5">
                 <h2 class="text-2xl font-bold text-sbiDark mb-1">Select Product</h2>
@@ -349,13 +387,89 @@
     </main>
 
     <script>
+        // --- MANDATORY GREETING & VALIDATION LOGIC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            checkUserAuth();
+        });
+
+        function checkUserAuth() {
+            const today = new Date().toDateString();
+            const savedName = localStorage.getItem("salesBuddyUserName");
+            const savedDate = localStorage.getItem("salesBuddyVisitDate");
+
+            if (savedName && savedDate === today) {
+                // User is verified for today - Show Dashboard
+                document.getElementById("greeting-title").innerText = "Welcome, " + savedName + "!";
+                
+                // Hide Welcome Screen, Show Home View & Nav Bar
+                document.querySelectorAll('.app-view').forEach(view => view.classList.add('hidden'));
+                document.getElementById('homeView').classList.remove('hidden');
+                document.getElementById('main-nav').classList.remove('hidden');
+                
+            } else {
+                // Not verified - Force Welcome Screen
+                document.querySelectorAll('.app-view').forEach(view => view.classList.add('hidden'));
+                document.getElementById('welcomeScreenView').classList.remove('hidden');
+                document.getElementById('main-nav').classList.add('hidden'); // Hide Top Nav
+                
+                // Auto-fill the previously saved name so the user doesn't have to retype it daily
+                if (savedName) {
+                    document.getElementById("userNameInput").value = savedName;
+                }
+            }
+        }
+
+        function saveAndEnter() {
+            const nameInput = document.getElementById("userNameInput").value.trim();
+            const errorText = document.getElementById("nameError");
+            
+            // REGEX EXPLANATION: 
+            // ^ = start, [A-Za-z\s] = allow upper/lowercase letters and spaces
+            // {3,} = minimum of 3 characters, $ = end of string
+            const nameValidationRegex = /^[A-Za-z\s]{3,}$/;
+
+            if (nameValidationRegex.test(nameInput)) {
+                // Name is valid
+                errorText.classList.add('hidden');
+                const today = new Date().toDateString();
+                
+                localStorage.setItem("salesBuddyUserName", nameInput);
+                localStorage.setItem("salesBuddyVisitDate", today);
+                
+                // Switch out of welcome screen
+                checkUserAuth();
+            } else {
+                // Name is invalid (numbers, special chars, or too short)
+                errorText.classList.remove('hidden');
+                
+                // Add a little shake animation for user feedback
+                const inputField = document.getElementById("userNameInput");
+                inputField.classList.add('border-red-500');
+                setTimeout(() => inputField.classList.remove('border-red-500'), 1000);
+            }
+        }
+
+        // --- EXISTING APP LOGIC BELOW ---
         const shareOnWhatsApp = (text) => window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
         let currentCalcBackTarget = 'homeView';
 
         function navigateTo(viewId) {
+            // SECURITY CHECK: Do not allow navigation to homeView if they haven't bypassed the welcome screen today
+            if (viewId === 'homeView') {
+                const today = new Date().toDateString();
+                if (localStorage.getItem("salesBuddyVisitDate") !== today) {
+                    checkUserAuth(); // This forces them back to the welcome screen
+                    return; 
+                }
+            }
+
             document.querySelectorAll('.app-view').forEach(view => view.classList.add('hidden'));
             document.getElementById(viewId).classList.remove('hidden');
-            if(viewId !== 'calculatorView') { document.getElementById('calcFrame').src = ''; document.body.classList.remove('overflow-hidden'); }
+            
+            if(viewId !== 'calculatorView') { 
+                document.getElementById('calcFrame').src = ''; 
+                document.body.classList.remove('overflow-hidden'); 
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -498,7 +612,7 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-orange-200 text-center flex flex-col items-center gap-3 w-full">
                     <div class="w-16 h-16 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center text-3xl shadow-sm border border-orange-100"><i class="fas fa-file-csv"></i></div>
                     <h3 class="font-bold text-sbiDark text-lg leading-tight">Database Required</h3>
-                    <p class="text-sm text-gray-500 mb-2 leading-snug">The hospital network file was not found in the repository. Please upload the CSV file manually.</p>
+                    <p class="text-sm text-gray-500 mb-2 leading-snug">The network hospital database file was not found in the repository. Please upload the valid CSV file to proceed.</p>
                     <label class="bg-sbiBlue text-white px-6 py-3 rounded-xl text-sm font-bold cursor-pointer shadow-md active:bg-blue-600 transition-colors w-full">
                         <i class="fas fa-upload mr-2"></i> Select CSV File
                         <input type="file" accept=".csv" class="hidden" onchange="handleCSVUpload(event)">
