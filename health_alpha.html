@@ -145,29 +145,6 @@
         </div>
     </div>
 
-    <!-- DYNAMIC SALES PERSON INTERCEPT MODAL -->
-    <div id="salesModalOverlay" class="custom-alert-overlay">
-        <div class="custom-alert-box" style="max-width: 380px;">
-            <i id="modalIcon" class="fas fa-file-invoice" style="font-size: 32px; color: var(--accent-color); margin-bottom: 15px;"></i>
-            <div class="results-header" style="margin-bottom: 20px; font-size: 18px;">Customize Your Quote</div>
-            
-            <div style="text-align: left; margin-bottom: 15px;">
-                <label>Name (Optional)</label>
-                <input type="text" id="salesInputName" placeholder="e.g. John Doe">
-            </div>
-            
-            <div style="text-align: left; margin-bottom: 25px;">
-                <label>Contact Number (Optional)</label>
-                <input type="text" id="salesInputContact" placeholder="e.g. +91 9876543210">
-            </div>
-            
-            <div class="actions" style="margin-top: 0; flex-direction: row;">
-                <button class="btn btn-grey" onclick="closeSalesModal()" style="flex: 1; padding: 12px 10px;">Cancel</button>
-                <button id="modalSubmitBtn" class="btn btn-primary" onclick="submitSalesModal()" style="flex: 2; margin-top: 0; padding: 12px 10px;"><i class="fas fa-check"></i> Generate</button>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         <header class="page-head">
             <h1>Health Alpha <span>Select</span></h1>
@@ -305,9 +282,8 @@
         // ========================================================================
         // BACKEND / SYNC SETUP
         // ========================================================================
-        const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWZqb-dHT35EIOEfAaeYNMx5NNwYqPgRwRb-QjqIDQQrBxTzZj-y2oDhhSROL-rWM/exec'; 
+        const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyCt_R9SdB-L4mBAIr7JJymSSzvzZWX4zyU-xIdVH_HYL1Y4iYVBuU05Tfngp5zfHP14g/exec'; 
 
-        let pendingAction = ''; 
         let activeQuoteId = null;
         let lastCalcSignature = null;
         let lastSavedPayloadStr = null; 
@@ -317,29 +293,6 @@
         function showAlert(msg) { document.getElementById('customAlertMsg').innerText = msg; document.getElementById('customAlertOverlay').style.display = 'flex'; }
         function closeAlert() { document.getElementById('customAlertOverlay').style.display = 'none'; }
         
-        function openSalesModal(actionType) { 
-            pendingAction = actionType;
-            const icon = document.getElementById('modalIcon');
-            const submitBtn = document.getElementById('modalSubmitBtn');
-            
-            if (actionType === 'whatsapp') {
-                icon.className = 'fab fa-whatsapp'; icon.style.color = '#25D366';
-                submitBtn.className = 'btn btn-whatsapp'; submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Generate & Share';
-            } else {
-                icon.className = 'fas fa-file-pdf'; icon.style.color = '#10b981';
-                submitBtn.className = 'btn btn-green'; submitBtn.innerHTML = '<i class="fas fa-download"></i> Download PDF';
-            }
-            document.getElementById('salesModalOverlay').style.display = 'flex'; 
-        }
-
-        function closeSalesModal() { document.getElementById('salesModalOverlay').style.display = 'none'; }
-        function submitSalesModal() {
-            closeSalesModal();
-            const sName = document.getElementById('salesInputName').value.trim();
-            const sPhone = document.getElementById('salesInputContact').value.trim();
-            handlePdfAction(pendingAction, sName, sPhone);
-        }
-
         // Programmatically set toggle values (Used for Recall feature)
         function setToggleValue(hiddenInputId, val) {
             const hiddenInput = document.getElementById(hiddenInputId);
@@ -358,8 +311,8 @@
             hiddenInput.dispatchEvent(new Event('change'));
         }
 
-        // --- BACKEND SAVING LOGIC ---
-        async function saveQuoteToBackend(quoteId, finalPremiums) {
+        // --- BACKEND SAVING LOGIC (Receives dynamic location arguments) ---
+        async function saveQuoteToBackend(quoteId, finalPremiums, locCountry, locState, locDistrict, locCity) {
             let membersArr = [];
             document.querySelectorAll('.member-card').forEach(card => {
                 membersArr.push({
@@ -369,11 +322,21 @@
                 });
             });
 
+            const storedName = localStorage.getItem("salesBuddyUserName") || "Authorized Partner";
+
             const payload = {
+                action: "save",
+                userName: storedName,
+                country: locCountry,
+                state: locState,
+                district: locDistrict,
+                city: locCity,
+                productName: "Health Alpha - Select",
+                planType: document.getElementById('policyType').value,
+                sumInsured: document.getElementById('sumInsured').value,
+                premiumQuoted: finalPremiums[0]?.prem || 0,
                 quoteId: quoteId,
                 customerName: document.getElementById('customerName').value,
-                policyType: document.getElementById('policyType').value,
-                sumInsured: document.getElementById('sumInsured').value,
                 combination: document.getElementById('combination').value,
                 zone: document.getElementById('zone').value,
                 tenure: document.getElementById('tenure').value,
@@ -405,7 +368,6 @@
             const currentPayloadStr = JSON.stringify(payload);
 
             if (currentPayloadStr === lastSavedPayloadStr) {
-                console.log("No changes detected. Skipping save.");
                 return; 
             }
 
@@ -417,7 +379,6 @@
                     body: currentPayloadStr
                 });
                 lastSavedPayloadStr = currentPayloadStr; 
-                console.log("Health Alpha scenario saved to backend.");
             } catch (e) { console.error("Failed to save quote to Sheets", e); }
         }
 
@@ -820,101 +781,126 @@
             return results;
         }
 
-        function calculateAndDisplay() {
+        async function calculateAndDisplay() {
             if (document.querySelector('.input-error')) { showAlert("Please correct the highlighted age errors before calculating."); return; }
             let membersAges = []; let isValid = true;
             document.querySelectorAll('.member-card').forEach(card => { const age = parseInt(card.querySelector('.age-input').value); if (isNaN(age)) isValid = false; membersAges.push(age); });
             if(!isValid && membersAges.length > 0) { showAlert("Please enter ages for all the members"); return; } 
             else if (membersAges.length === 0) { showAlert("Please add members first."); return; }
 
-            const siLabel = document.getElementById('sumInsured').value;
-            const data = calculatePremiumFor(siLabel);
-            
-            // --- SYNC & QUOTE ID GENERATION ---
-            // FIXED: Capture EVERY SINGLE FIELD so changing a discount triggers a new Quote ID
-            let membersSignature = [];
-            document.querySelectorAll('.member-card').forEach(card => {
-                membersSignature.push(card.querySelector('.age-input').value + card.querySelector('.gender-input').value);
-            });
+            const calcBtn = document.getElementById('calcBtn');
+            const originalBtnHTML = calcBtn.innerHTML;
+            calcBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            calcBtn.disabled = true;
 
-            const currentSignature = JSON.stringify({
-                cust: document.getElementById('customerName').value,
-                policy: document.getElementById('policyType').value,
-                si: document.getElementById('sumInsured').value,
-                combo: document.getElementById('combination').value,
-                zone: document.getElementById('zone').value,
-                ten: document.getElementById('tenure').value,
-                room: document.getElementById('roomCategory').value,
-                ped: document.getElementById('pedWait').value,
-                spec: document.getElementById('specWait').value,
-                ncb: document.getElementById('ncb').value,
-                cons: document.getElementById('consumables').value,
-                air: document.getElementById('airAmbulance').value,
-                hc: document.getElementById('healthCheck').value,
-                end: document.getElementById('endless').value,
-                rec: document.getElementById('reconstructive').value,
-                opd: document.getElementById('opd').value,
-                cash: document.getElementById('hospitalCash').value,
-                mat: document.getElementById('maternity').value,
-                matW: document.getElementById('maternityWait').value,
-                welc: document.getElementById('welcomeDisc').value,
-                pref: document.getElementById('preferredNetwork').value,
-                cross: document.getElementById('crossSellDiscount').value,
-                emp: document.getElementById('employeeDiscount').value,
-                mems: membersSignature.join('|')
-            });
-            
-            if (currentSignature !== lastCalcSignature || !activeQuoteId) {
-                activeQuoteId = generateQuoteId(); lastCalcSignature = currentSignature;
-            }
-            document.getElementById('displayQuoteId').innerText = activeQuoteId;
-            document.getElementById('quoteIdContainer').style.display = 'block';
-
-            // TRIGGER BACKGROUND SAVE
-            saveQuoteToBackend(activeQuoteId, data);
-            
-            const gridTarget = document.getElementById('premiumGridTarget');
-            gridTarget.innerHTML = ''; 
-
-            const selectedTenure = parseInt(document.getElementById('tenure').value) || 1;
-
-            for (let yr = 1; yr <= 5; yr++) {
-                let yrData = data[yr-1];
-                const headerClass = (yr % 2 === 0) ? 'header-blue' : 'header-purple';
-                const cardHTML = `
-                <div class="premium-card">
-                    <div class="p-card-header ${headerClass}">${yr} Year Policy</div>
-                    <div class="p-card-body">
-                        <div class="p-final-container">
-                            <div class="p-final-label">Final Premium</div>
-                            <div class="p-final-amount">₹ ${yrData.prem.toLocaleString('en-IN')}</div>
-                            ${yrData.save > 10 ? `<div class="p-saved-box"><i class="fas fa-check-circle"></i> SAVE: ${yrData.save}%</div>` : ''}
-                        </div>
-                    </div>
-                </div>`;
-                gridTarget.innerHTML += cardHTML;
+            try {
+                const siLabel = document.getElementById('sumInsured').value;
+                const data = calculatePremiumFor(siLabel);
                 
-                if(yr === selectedTenure) { window.selectedTenurePremium = yrData.prem; }
+                // 1. Fetch IP Location ON-DEMAND dynamically (No limits, No CORS issues)
+                let locCountry = "N/A", locState = "N/A", locDistrict = "N/A", locCity = "N/A";
+                try {
+                    const response = await fetch('https://get.geojs.io/v1/ip/geo.json');
+                    if(response.ok) {
+                        const geoData = await response.json();
+                        locCountry = geoData.country || "India";
+                        locState = geoData.region || "Unknown";
+                        locDistrict = geoData.city || "Unknown";
+                        locCity = geoData.city || "Unknown";
+                    }
+                } catch(e) {
+                    console.log("Location fetch failed silently.");
+                }
+                
+                // --- SYNC & QUOTE ID GENERATION ---
+                let membersSignature = [];
+                document.querySelectorAll('.member-card').forEach(card => {
+                    membersSignature.push(card.querySelector('.age-input').value + card.querySelector('.gender-input').value);
+                });
+
+                const currentSignature = JSON.stringify({
+                    cust: document.getElementById('customerName').value,
+                    policy: document.getElementById('policyType').value,
+                    si: document.getElementById('sumInsured').value,
+                    combo: document.getElementById('combination').value,
+                    zone: document.getElementById('zone').value,
+                    ten: document.getElementById('tenure').value,
+                    room: document.getElementById('roomCategory').value,
+                    ped: document.getElementById('pedWait').value,
+                    spec: document.getElementById('specWait').value,
+                    ncb: document.getElementById('ncb').value,
+                    cons: document.getElementById('consumables').value,
+                    air: document.getElementById('airAmbulance').value,
+                    hc: document.getElementById('healthCheck').value,
+                    end: document.getElementById('endless').value,
+                    rec: document.getElementById('reconstructive').value,
+                    opd: document.getElementById('opd').value,
+                    cash: document.getElementById('hospitalCash').value,
+                    mat: document.getElementById('maternity').value,
+                    matW: document.getElementById('maternityWait').value,
+                    welc: document.getElementById('welcomeDisc').value,
+                    pref: document.getElementById('preferredNetwork').value,
+                    cross: document.getElementById('crossSellDiscount').value,
+                    emp: document.getElementById('employeeDiscount').value,
+                    mems: membersSignature.join('|')
+                });
+                
+                if (currentSignature !== lastCalcSignature || !activeQuoteId) {
+                    activeQuoteId = generateQuoteId(); lastCalcSignature = currentSignature;
+                }
+                document.getElementById('displayQuoteId').innerText = activeQuoteId;
+                document.getElementById('quoteIdContainer').style.display = 'block';
+
+                // TRIGGER BACKGROUND SAVE with fresh location data
+                saveQuoteToBackend(activeQuoteId, data, locCountry, locState, locDistrict, locCity);
+                
+                const gridTarget = document.getElementById('premiumGridTarget');
+                gridTarget.innerHTML = ''; 
+
+                const selectedTenure = parseInt(document.getElementById('tenure').value) || 1;
+
+                for (let yr = 1; yr <= 5; yr++) {
+                    let yrData = data[yr-1];
+                    const headerClass = (yr % 2 === 0) ? 'header-blue' : 'header-purple';
+                    const cardHTML = `
+                    <div class="premium-card">
+                        <div class="p-card-header ${headerClass}">${yr} Year Policy</div>
+                        <div class="p-card-body">
+                            <div class="p-final-container">
+                                <div class="p-final-label">Final Premium</div>
+                                <div class="p-final-amount">₹ ${yrData.prem.toLocaleString('en-IN')}</div>
+                                ${yrData.save > 10 ? `<div class="p-saved-box"><i class="fas fa-check-circle"></i> SAVE: ${yrData.save}%</div>` : ''}
+                            </div>
+                        </div>
+                    </div>`;
+                    gridTarget.innerHTML += cardHTML;
+                    
+                    if(yr === selectedTenure) { window.selectedTenurePremium = yrData.prem; }
+                }
+
+                const optGrid = document.getElementById('optionals-grid-target'); optGrid.innerHTML = '';
+                const optionalMap = [ { label: 'Consumables', val: document.getElementById('consumables').value, icon: 'fa-box-open' }, { label: 'Air Ambulance', val: document.getElementById('airAmbulance').value, icon: 'fa-plane' }, { label: 'Health Check', val: document.getElementById('healthCheck').value, icon: 'fa-user-md' }, { label: 'Endless SI', val: document.getElementById('endless').value, icon: 'fa-infinity' }, { label: 'Reconstructive', val: document.getElementById('reconstructive').value, icon: 'fa-crutch' }, { label: 'OPD', val: document.getElementById('opd').value, icon: 'fa-clinic-medical' }, { label: 'Hospital Cash', val: document.getElementById('hospitalCash').value, icon: 'fa-money-bill-wave' }, { label: 'Maternity', val: document.getElementById('maternity').value, icon: 'fa-baby' } ];
+                const activeOptionals = optionalMap.filter(o => o.val !== 'Not Opted' && o.val !== 'No');
+                const optSection = document.getElementById('optionals-display-section');
+                if (activeOptionals.length === 0) { optSection.style.display = 'none'; }
+                else { 
+                    optSection.style.display = 'block'; 
+                    activeOptionals.forEach(o => { let valDisplay = o.val; if(o.label === 'Maternity') valDisplay += ` (${document.getElementById('maternityWait').value} Wait)`; optGrid.innerHTML += `<div class="feat-item"><i class="fas ${o.icon} feat-icon"></i><div class="feat-label">${o.label}</div><div class="feat-val">${valDisplay}</div></div>`; }); 
+                }
+
+                const modGrid = document.getElementById('modifiers-grid-target'); modGrid.innerHTML = '';
+                const ncbSel = document.getElementById('ncb');
+                const modifiers = [ { label: 'Room', val: document.getElementById('roomCategory').value, icon: 'fa-bed' }, { label: 'Pre-Hosp', val: '60 Days', icon: 'fa-hourglass-start' }, { label: 'Post-Hosp', val: '90 Days', icon: 'fa-hourglass-end' }, { label: 'PED Wait', val: document.getElementById('pedWait').value, icon: 'fa-history' }, { label: 'Spec. Wait', val: document.getElementById('specWait').value, icon: 'fa-hourglass-half' }, { label: 'NCB/NCD', val: ncbSel.options[ncbSel.selectedIndex].text, icon: 'fa-star' }, { label: 'Zone', val: document.getElementById('zone').value, icon: 'fa-map-marker-alt' } ];
+                modifiers.forEach(m => { modGrid.innerHTML += `<div class="feat-item"><i class="fas ${m.icon} feat-icon"></i><div class="feat-label">${m.label}</div><div class="feat-val">${m.val}</div></div>`; });
+
+                document.getElementById('results-container').style.display = 'block'; 
+                document.getElementById('results-container').scrollIntoView({ behavior: 'smooth' });
+            } finally {
+                calcBtn.innerHTML = originalBtnHTML;
+                calcBtn.disabled = false;
             }
-
-            const optGrid = document.getElementById('optionals-grid-target'); optGrid.innerHTML = '';
-            const optionalMap = [ { label: 'Consumables', val: document.getElementById('consumables').value, icon: 'fa-box-open' }, { label: 'Air Ambulance', val: document.getElementById('airAmbulance').value, icon: 'fa-plane' }, { label: 'Health Check', val: document.getElementById('healthCheck').value, icon: 'fa-user-md' }, { label: 'Endless SI', val: document.getElementById('endless').value, icon: 'fa-infinity' }, { label: 'Reconstructive', val: document.getElementById('reconstructive').value, icon: 'fa-crutch' }, { label: 'OPD', val: document.getElementById('opd').value, icon: 'fa-clinic-medical' }, { label: 'Hospital Cash', val: document.getElementById('hospitalCash').value, icon: 'fa-money-bill-wave' }, { label: 'Maternity', val: document.getElementById('maternity').value, icon: 'fa-baby' } ];
-            const activeOptionals = optionalMap.filter(o => o.val !== 'Not Opted' && o.val !== 'No');
-            const optSection = document.getElementById('optionals-display-section');
-            if (activeOptionals.length === 0) { optSection.style.display = 'none'; }
-            else { 
-                optSection.style.display = 'block'; 
-                activeOptionals.forEach(o => { let valDisplay = o.val; if(o.label === 'Maternity') valDisplay += ` (${document.getElementById('maternityWait').value} Wait)`; optGrid.innerHTML += `<div class="feat-item"><i class="fas ${o.icon} feat-icon"></i><div class="feat-label">${o.label}</div><div class="feat-val">${valDisplay}</div></div>`; }); 
-            }
-
-            const modGrid = document.getElementById('modifiers-grid-target'); modGrid.innerHTML = '';
-            const ncbSel = document.getElementById('ncb');
-            const modifiers = [ { label: 'Room', val: document.getElementById('roomCategory').value, icon: 'fa-bed' }, { label: 'Pre-Hosp', val: '60 Days', icon: 'fa-hourglass-start' }, { label: 'Post-Hosp', val: '90 Days', icon: 'fa-hourglass-end' }, { label: 'PED Wait', val: document.getElementById('pedWait').value, icon: 'fa-history' }, { label: 'Spec. Wait', val: document.getElementById('specWait').value, icon: 'fa-hourglass-half' }, { label: 'NCB/NCD', val: ncbSel.options[ncbSel.selectedIndex].text, icon: 'fa-star' }, { label: 'Zone', val: document.getElementById('zone').value, icon: 'fa-map-marker-alt' } ];
-            modifiers.forEach(m => { modGrid.innerHTML += `<div class="feat-item"><i class="fas ${m.icon} feat-icon"></i><div class="feat-label">${m.label}</div><div class="feat-val">${m.val}</div></div>`; });
-
-            document.getElementById('results-container').style.display = 'block'; 
-            document.getElementById('results-container').scrollIntoView({ behavior: 'smooth' });
         }
+        
         document.getElementById('calcBtn').addEventListener('click', calculateAndDisplay);
 
         async function generatePDFBlob(customerName, si, policyType, combination, zone, tenure, membersStr, salesName = '', salesContact = '') {
@@ -963,8 +949,8 @@
             let colDisc = `<div class="pdf-col"><div class="pdf-col-h">Discounts</div>${discRows}</div>`;
 
             let salesBlockHTML = '';
-            if (salesName || salesContact) {
-                salesBlockHTML = `<div class="pdf-sales-signature"><div><div class="sales-title">Custom Quote Prepared By</div><div class="sales-name">${salesName || 'Authorized Partner'}</div></div><div class="sales-contact">${salesContact ? `<i class="fas fa-phone-alt"></i> ${salesContact}` : ''}</div></div>`;
+            if (salesName) {
+                salesBlockHTML = `<div class="pdf-sales-signature"><div><div class="sales-title">Custom Quote Prepared By</div><div class="sales-name">${salesName}</div></div></div>`;
             }
 
             overlayRoot.innerHTML = `
@@ -1005,7 +991,7 @@
             overlayRoot.style.display = 'none'; return pdfBlob;
         }
 
-        async function handlePdfAction(actionType, salesName = '', salesContact = '') {
+        async function handlePdfAction(actionType) {
             const customerName = document.getElementById('customerName').value || "Customer";
             const si = document.getElementById('sumInsured').value;
             const policyType = document.getElementById('policyType').value;
@@ -1014,23 +1000,38 @@
             const tenureSelect = document.getElementById('tenure');
             const tenureText = tenureSelect.options[tenureSelect.selectedIndex].text;
             
-            let membersStr = []; let waAges = [];
-            document.querySelectorAll('.member-card').forEach(card => { const age = card.querySelector('.age-input').value; if(age) { membersStr.push(`${age}y`); waAges.push(age); } });
+            // AUTOMATICALLY GRAB THE LOCKED NAME
+            const salesName = localStorage.getItem("salesBuddyUserName") || "Authorized Partner";
+            const salesContact = ""; // Left blank as requested
             
-            let finalPremium = "N/A"; if (window.selectedTenurePremium) finalPremium = "₹ " + window.selectedTenurePremium.toLocaleString('en-IN');
+            let membersStr = []; let waAges = [];
+            document.querySelectorAll('.member-card').forEach(card => { 
+                const age = card.querySelector('.age-input').value; 
+                if(age) { membersStr.push(`${age}y`); waAges.push(age); } 
+            });
+            
+            let finalPremium = "N/A"; 
+            if (window.selectedTenurePremium) finalPremium = "₹ " + window.selectedTenurePremium.toLocaleString('en-IN');
+            
             const pdfBlob = await generatePDFBlob(customerName, si, policyType, combination, zone, tenureText, membersStr, salesName, salesContact);
             const fileName = `Health_Alpha_Quote_${customerName}.pdf`;
 
             if (actionType === 'download') {
-                const url = URL.createObjectURL(pdfBlob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); URL.revokeObjectURL(url);
+                const url = URL.createObjectURL(pdfBlob); 
+                const a = document.createElement('a'); 
+                a.href = url; a.download = fileName; a.click(); 
+                URL.revokeObjectURL(url);
             } else if (actionType === 'whatsapp') {
-                let salesFooter = ''; if (salesName || salesContact) { salesFooter = `\n-----------------------------\n*Quote Prepared By:*\n*Name:* ${salesName || 'Authorized Partner'}`; if (salesContact) salesFooter += `\n*Contact:* ${salesContact}`; }
+                let salesFooter = `\n-----------------------------\n*Quote Prepared By:*\n*Name:* ${salesName}`;
                 const msg = `*Health Alpha Select Quote* 🏥\n\n*Customer Name:* ${customerName}\n*Quote ID:* ${activeQuoteId || 'N/A'}\n*${tenureText} Total Premium:* ${finalPremium} \n-----------------------------\n*Sum Insured:* ${si}\n*Policy Type:* ${policyType}\n*Zone / Tenure:* ${zone} / ${tenureText}\n*Combination:* ${combination}\n*Member Ages:* ${waAges.join(', ')}${salesFooter}\n-----------------------------\n_Please find the attached quote for more details_`;
                 
                 const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     try { await navigator.share({ files: [file], title: 'Health Alpha Quote', text: msg }); } 
-                    catch (err) { const url = URL.createObjectURL(pdfBlob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank'); }
+                    catch (err) { 
+                        const url = URL.createObjectURL(pdfBlob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click(); 
+                        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank'); 
+                    }
                 } else {
                     const url = URL.createObjectURL(pdfBlob); const a = document.createElement('a'); a.href = url; a.download = fileName; a.click();
                     showAlert("On this device/browser, we downloaded the PDF. Please attach it manually to WhatsApp.");
@@ -1039,8 +1040,9 @@
             }
         }
 
-        document.getElementById('pdfBtn').addEventListener('click', () => openSalesModal('download'));
-        document.getElementById('waBtn').addEventListener('click', () => openSalesModal('whatsapp'));
+        document.getElementById('pdfBtn').addEventListener('click', () => handlePdfAction('download'));
+        document.getElementById('waBtn').addEventListener('click', () => handlePdfAction('whatsapp'));
+        
         document.getElementById('genMembersBtn').addEventListener('click', renderMemberRows);
         document.getElementById('resetBtn').addEventListener('click', () => window.location.reload());
         document.getElementById('policyType').addEventListener('change', () => { enforcePolicyCombination(); renderMemberRows(); });
